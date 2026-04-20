@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->string('slug')->nullable();
+            $table->text('slug')->nullable();
             $table->longText('description')->nullable();
             $table->text('excerpt')->nullable();
             $table->text('tags')->nullable();
-            $table->string('featured_image')->nullable();
+            $table->text('featured_image')->nullable();
             $table->boolean('active')->default(1);
             $table->boolean('editor')->default(1);
             $table->string('status')->default('pending');

@@ -67,5 +67,25 @@ Route::group(['middleware' => ['web']], function () {
 
 
 //admin
-Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'admin'], function () {
+
+    Route::get('contact-messages', [
+        'uses' => 'Cp\Frontend\Controllers\AdminContactUsController@index',
+        'as' => 'admin.contactMessages.index'
+    ]);
+
+    Route::post('contact-messages/delete/{contact}', [
+        'uses' => 'Cp\Frontend\Controllers\AdminContactUsController@destroy',
+        'as' => 'admin.contactMessages.destroy'
+    ]);
+
+    Route::post('contact-messages/bulk-delete', [
+        'uses' => 'Cp\Frontend\Controllers\AdminContactUsController@bulkDestroy',
+        'as' => 'admin.contactMessages.bulkDestroy'
+    ]);
+
+    Route::post('contact-messages/print', [
+        'uses' => 'Cp\Frontend\Controllers\AdminContactUsController@printSelected',
+        'as' => 'admin.contactMessages.print'
+    ]);
 });

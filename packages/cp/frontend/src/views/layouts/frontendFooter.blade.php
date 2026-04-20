@@ -1,63 +1,152 @@
-<footer id="footer" class="border-top-0 mt-0" style="" >
+<footer id="footer" class="cp-footer border-top-0 mt-0">
     <div class="container py-5">
-        <div class="row py-3 justify-content-between">
-            <div class="col-md-4 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
-                <h5 class="text-6 text-transform-none font-weight-semibold text-color-light mb-4">OFFICE ADDRESS</h5>
-               <ul class="list list-icons list-icons-lg">
-                    <li class="mb-1"><i class="far fa-dot-circle text-color-primary"></i><p class="m-0">{{ $ws->contact_address }}</p></li>
-				</ul>
-            </div>
-
-            <div class="col-md-6 col-lg-6 mb-4 mb-lg-0">
-                <h5 class="text-6 text-transform-none font-weight-semibold text-color-light mb-4">CONTACT US</h5>
-                <ul class="list list-icons list-icons-lg">
-                    <li class="mb-1"><i class="far fa-dot-circle text-color-primary"></i><p class="m-0">{{ $ws->contact_address }}</p></li>
-                    <li class="mb-1"><i class="fab fa-whatsapp text-color-primary"></i><p class="m-0"><a href="tel:{{ $ws->contact_mobile }}">{{ $ws->contact_mobile }}</a></p></li>
-                    <li class="mb-1"><i class="far fa-envelope text-color-primary"></i><p class="m-0"><a href="mailto:{{ $ws->contact_email }}">{{ $ws->contact_email }}</a></p></li>
-				</ul>
-            </div>
-
-            <div class="col-md-2 col-lg-2 mb-4 mb-lg-0">
-                <a href="https://livetrafficfeed.com/live/matson.com.bd" id="LTF_st_href" target="_blank"><img id="LTF_st_src" src="//livetrafficfeed.com/static/static-counter/feed.jpg?d=matson.com.bd&c=f26bc0ecb7f521a30bea5a94058878c5&timezone=Asia%2FDhaka&r=425155841" alt="Free Start Counter"></a><script type="text/javascript" src="//cdn.livetrafficfeed.com/static/static-counter/liveim.js"></script>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <ul class="social-icons social-icons-clean-with-border social-icons-medium" >
-
-                    <li class="social-icons-facebook mx-2">
-                        <a href="{{asset('https://www.facebook.com/matson.com.bd')}}" class="no-footer-css" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    </li>
-
-                    <li class="social-icons-instagram">
-                        <a class="" href="{{asset('https://www.instagram.com/matsondistribution22/')}}" class="no-footer-css" target="_blank" title="Instagram"><i class="fab fa-instagram "></i></a>
-                    </li>
-                    <li class="social-icons-linkedin mx-2">
-                        <a href="{{asset('https://www.linkedin.com/in/matsonbd/')}}" class="no-footer-css" target="_blank" title="Linkedin"><i class="fab fa-linkedin"></i></a>
-                    </li>
-                   
-
-                    <li class="social-icons-twitter text-8">
-                        <a class="" href="{{asset('https://twitter.com/MatsonBd')}}" class="no-footer-css" target="_blank" title="Twitter"><i class="fab fa-twitter "></i></a>
-                    </li>
-
-                    <li class="social-icons-youtube">
-                        <a href="{{asset('https://www.youtube.com/channel/UC9AH09Bq0Ad_tjGdD_9-CCg')}}" class="no-footer-css" target="_blank" title="Youtube"><i class="fab fa-youtube"></i></a>
-                    </li>
+        <div class="row g-4">
+            <div class="col-12 col-md-3">
+                <h5 class="cp-footer__title mb-3">Products</h5>
+                <ul class="cp-footer__list">
+                    @foreach(($productCats ?? collect())->take(8) as $cat)
+                        <li>
+                            <a href="{{ route('productCategory', ['cat' => $cat->id, 'slug' => $cat->slug ?? '']) }}">
+                                {{ $cat->name }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
-            
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h5 class="cp-footer__title mb-3">About Us</h5>
+                <ul class="cp-footer__list">
+                    @php
+                        $aboutMenu = collect($headerMenus ?? $footerMenus ?? [])->firstWhere('id', 5);
+                    @endphp
+
+                    @if($aboutMenu)
+                        @if(!empty($aboutMenu->link))
+                            <li><a href="{{ $aboutMenu->link }}">{{ $aboutMenu->name }}</a></li>
+                        @endif
+
+                        @if($aboutMenu->pages)
+                            @foreach (collect($aboutMenu->latestPages())->take(8) as $page)
+                                @if($page->link)
+                                    <li><a href="{{ $page->link }}">{{ $page->name }}</a></li>
+                                @else
+                                    <li><a href="{{ route('page', ['id' => $page->id, 'slug' => page_slug($page->name)]) }}">{{ $page->name }}</a></li>
+                                @endif
+                            @endforeach
+                        @endif
+                    @else
+                        @foreach(($footerMenus ?? collect())->take(8) as $menu)
+                            @if(!empty($menu->link))
+                                <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                            @else
+                                <li><a href="javascript:void(0)">{{ $menu->name }}</a></li>
+                            @endif
+                        @endforeach
+                    @endif
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h5 class="cp-footer__title mb-3">
+                    @if(!empty($ws->contact_email))
+                        <a href="mailto:{{ $ws->contact_email }}" class="cp-footer__title-link">
+                            <i class="far fa-envelope me-2"></i>{{ $ws->contact_email }}
+                        </a>
+                    @else
+                        Contact
+                    @endif
+                </h5>
+
+                @if(!empty($ws->footer_address))
+                    <div class="cp-footer__block">
+                        {!! nl2br(e($ws->footer_address)) !!}
+                    </div>
+                @elseif(!empty($ws->contact_address))
+                    <div class="cp-footer__block">
+                        <i class="fas fa-map-marker-alt me-2"></i>{!! nl2br(e($ws->contact_address)) !!}
+                    </div>
+                @endif
+
+                @if(!empty($ws->contact_mobile))
+                    <div class="cp-footer__block mt-2">
+                        <i class="fas fa-phone me-2"></i><a href="tel:{{ $ws->contact_mobile }}">{{ $ws->contact_mobile }}</a>
+                    </div>
+                @endif
+
+                <div class="mt-3">
+                    <ul class="cp-footer__social">
+                        @if(!empty($ws->fb_url))
+                            <li><a href="{{ $ws->fb_url }}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                        @endif
+                        @if(!empty($ws->instagram_url))
+                            <li><a href="{{ $ws->instagram_url }}" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+                        @endif
+                        @if(!empty($ws->linkedin_url))
+                            <li><a href="{{ $ws->linkedin_url }}" target="_blank" rel="noopener" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+                        @endif
+                        @if(!empty($ws->twitter_url))
+                            <li><a href="{{ $ws->twitter_url }}" target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                        @endif
+                        @if(!empty($ws->youtube_url))
+                            <li><a href="{{ $ws->youtube_url }}" target="_blank" rel="noopener" title="Youtube"><i class="fab fa-youtube"></i></a></li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h5 class="cp-footer__title mb-3">Messages</h5>
+                <form action="{{ route('contactUs') }}" method="POST" class="cp-footer__form">
+                    @csrf
+                    <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+                        <label for="hp_website_footer">Website</label>
+                        <input type="text" name="hp_website" id="hp_website_footer" tabindex="-1" autocomplete="off" value="">
+                    </div>
+                    <input type="hidden" name="hp_time" value="{{ now()->timestamp }}">
+                    <input type="hidden" name="subject" value="Footer Message">
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger py-2 mb-2">
+                            Please fill all the fields.
+                        </div>
+                    @endif
+
+                    @if(Session::has('message'))
+                        <div class="alert alert-danger py-2 mb-2">
+                            {{ Session::get('message') }}
+                        </div>
+                    @endif
+
+                    <div class="mb-2">
+                        <input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control cp-footer__input" placeholder="Name" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="email" name="email" value="{{ old('email') }}" class="form-control cp-footer__input" placeholder="E-mail" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="number" value="{{ old('number') }}" class="form-control cp-footer__input" placeholder="Phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="message" rows="4" class="form-control cp-footer__input cp-footer__textarea" placeholder="Message" required>{{ old('message') }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-light w-100 cp-footer__submit">SUBMIT</button>
+                </form>
             </div>
         </div>
-
     </div>
-    <div class="footer-copyright footer-copyright-style-1   footer-top-light-border" style="">
-        <div class="container py-2">
-            <div class="row py-2">
-                <div class="col d-flex align-items-center justify-content-center mb-4 mb-lg-0">
-                   <p class="text-color-light">2023 © All Rights Reserved. Developed By&nbsp;:
-                            <a class="text-white" href="https://a2sys.co/"  target="_blank">&nbsp;a2sys.co</a>
-                        </p>
+
+    <div class="cp-footer__bottom">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="cp-footer__bottom-text">
+                        @if(!empty($ws->footer_copyright))
+                            {!! $ws->footer_copyright !!}
+                        @else
+                            {{ date('Y') }} © All rights reserved.
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

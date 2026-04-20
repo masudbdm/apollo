@@ -1,0 +1,134 @@
+
+/* Top bar: bright white links/icons for red background */
+.header-top.cp-topbar-bright-white,
+.header-top.cp-topbar-bright-white * {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.header-top.cp-topbar-bright-white a,
+.header-top.cp-topbar-bright-white .nav-link,
+.header-top.cp-topbar-bright-white i,
+.header-top.cp-topbar-bright-white span {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.header-top.cp-topbar-bright-white a:hover,
+.header-top.cp-topbar-bright-white a:focus {
+    color: #ffffff !important;
+    opacity: 0.92 !important;
+}
+
+.header-top.cp-topbar-bright-white .social-icons li a {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Footer (Apollo style) */
+.cp-footer {
+    background: #2f3b52;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.cp-footer__title {
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.cp-footer__title-link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.cp-footer__title-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+}
+
+.cp-footer__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cp-footer__list li {
+    margin-bottom: 8px;
+}
+
+.cp-footer__list a,
+.cp-footer__block a {
+    color: rgba(255, 255, 255, 0.78);
+    text-decoration: none;
+}
+
+.cp-footer__list a:hover,
+.cp-footer__block a:hover {
+    color: rgba(255, 255, 255, 0.92);
+    text-decoration: underline;
+}
+
+.cp-footer__block {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.95rem;
+    line-height: 1.35rem;
+}
+
+.cp-footer__social {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.cp-footer__social a {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+}
+
+.cp-footer__social a:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+}
+
+.cp-footer__input {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: none !important;
+}
+
+.cp-footer__input::placeholder {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.cp-footer__input:focus {
+    border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.cp-footer__textarea {
+    resize: vertical;
+}
+
+.cp-footer__submit {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.cp-footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.cp-footer__bottom-text {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.95rem;
+}

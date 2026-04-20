@@ -12,9 +12,12 @@ use Cp\Product\Models\Product;
 use Cp\Product\Models\ProductCategory;
 use Cp\Product\Models\ProductSubCategory;
 use Cp\Slider\Models\Slider;
+use Cp\WebsiteSetting\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class FrontendController extends Controller
 {
@@ -118,15 +121,34 @@ class FrontendController extends Controller
 
     public function contactUs(Request $request)
     {
+        // Honeypot (simple anti-bot)
+        if ($request->filled('hp_website')) {
+            return redirect()->back()->with('message', 'Something went wrong.')->withInput();
+        }
+
+        $hpTime = (int) $request->input('hp_time', 0);
+        if ($hpTime > 0) {
+            $diff = now()->timestamp - $hpTime;
+            if ($diff < 3 || $diff > 86400) {
+                return redirect()->back()->with('message', 'Something went wrong.')->withInput();
+            }
+        }
 
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'full_name' => 'required',
             'email'     => 'required',
             'subject'   => 'required',
             'number'    => 'required',
             'message'   => 'required',
         ]);
+
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $msg) {
+                toast($msg, 'error');
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $contactUs = new ContactUs();
         $contactUs->full_name  = $request->full_name;
@@ -139,28 +161,28 @@ class FrontendController extends Controller
 
 
 
-        // $from_email =  $request->email;
+        $from_email =  $request->email;
 
-        // $data = [
-        //     'email'     =>  $request->email,
-        //     'subject'   =>  $request->subject,
-        //     'full_name' =>  $request->full_name,
-        //     'details'   =>  $contactUs->message,
-        //     'contactNumber' => $contactUs->number
-        // ];
+        $data = [
+            'email'     =>  $request->email,
+            'subject'   =>  $request->subject,
+            'full_name' =>  $request->full_name,
+            'details'   =>  $contactUs->message,
+            'contactNumber' => $contactUs->number
+        ];
 
 
-        // $wp = WebsiteSetting::first();
+        $wp = WebsiteSetting::first();
         // dd($wp->contact_email);
 
 
-        // if (env('APP_ENV') != 'local') {
-        //     Mail::send('frontend::welcome.mail', $data, function ($message) use ($from_email, $wp) {
-        //         $message->from($from_email, env('APP_NAME'));
-        //         $message->to($wp->contact_email, '')
-        //             ->subject('Multisoft BD Contact Form: ');
-        //     });
-        // }
+        if (env('APP_ENV') != 'local' && $wp && !empty($wp->contact_email)) {
+            Mail::send('frontend::welcome.mail', $data, function ($message) use ($from_email, $wp) {
+                $message->from($from_email, env('APP_NAME'));
+                $message->to($wp->contact_email, '')
+                    ->subject(env('APP_NAME') . ' Contact Form: ');
+            });
+        }
 
 
         toast('Success', 'success');

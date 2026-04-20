@@ -34,7 +34,10 @@ class AdminWebsiteSettingController extends Controller
         $ws->meta_author = $request->meta_author;
         $ws->meta_description = $request->meta_description;
         $ws->footer_copyright = $request->footer_copyright;
+        $ws->website_url = $request->website_url;
         $ws->fb_url = $request->fb_url;
+        $ws->instagram_url = $request->instagram_url;
+        $ws->linkedin_url = $request->linkedin_url;
         $ws->contact_mobile = $request->contact_mobile;
         $ws->contact_email = $request->contact_email;
         $ws->contact_address = $request->contact_address;

@@ -116,10 +116,25 @@
                                                 <textarea name="footer_copyright" class="form-control" rows="4" id="footer_copyright" placeholder="Copyright text in footer area">{{ old('footer_copyright') ?: $ws->footer_copyright ?? '' }}</textarea>
                                             </div>
 
+                                            <div class="form-group ">
+                                                <label for="website_url" class="control-label">Website URL</label>
+                                                <input type="text" name="website_url" class="form-control" value="{{ old('website_url') ?: $ws->website_url ?? '' }}" id="website_url" placeholder="https://example.com" autocomplete="off">
+                                            </div>
+
 
                                             <div class="form-group ">
                                                 <label for="fb_url" class="  control-label">Facebook Page Url</label>
                                                 <input type="text" name="fb_url" class="form-control" value="{{ old('fb_url') ?: $ws->fb_url ?? '' }}" id="fb_url" placeholder="https://facebook.com/page.username" autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="instagram_url" class="control-label">Instagram Url</label>
+                                                <input type="text" name="instagram_url" class="form-control" value="{{ old('instagram_url') ?: $ws->instagram_url ?? '' }}" id="instagram_url" placeholder="https://instagram.com/username" autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="linkedin_url" class="control-label">LinkedIn Url</label>
+                                                <input type="text" name="linkedin_url" class="form-control" value="{{ old('linkedin_url') ?: $ws->linkedin_url ?? '' }}" id="linkedin_url" placeholder="https://linkedin.com/in/username" autocomplete="off">
                                             </div>
 
                                             <div class="form-group ">

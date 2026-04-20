@@ -1,5 +1,132 @@
 <header id="header" class="header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': false, 'stickyEnableOnMobile': false, 'stickyStartAt': 70, 'stickyChangeLogo': false, 'stickyHeaderContainerHeight': 70}">
+    <style>
+        @media (max-width: 991.98px) {
+            #header #mainNav > li > a.dropdown-item,
+            #header #mainNav a.dropdown-item {
+                color: #dc3545 !important;
+            }
+
+            #header .header-btn-collapse-nav {
+                background: #dc3545 !important;
+                background-color: #dc3545 !important;
+                color: #fff !important;
+                border-color: #dc3545 !important;
+                box-shadow: none !important;
+            }
+
+            #header .header-btn-collapse-nav i {
+                color: #fff !important;
+            }
+
+            #header .header-btn-collapse-nav:hover,
+            #header .header-btn-collapse-nav:focus {
+                background: #dc3545 !important;
+                background-color: #dc3545 !important;
+                color: #fff !important;
+                border-color: #dc3545 !important;
+                box-shadow: none !important;
+            }
+
+            #header .header-btn-collapse-nav:active,
+            #header .header-btn-collapse-nav[aria-expanded="true"] {
+                background: #dc3545 !important;
+                background-color: #dc3545 !important;
+                color: #fff !important;
+                border-color: #dc3545 !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
     <div class="header-body border-top-0 box-shadow-none">
+        <div class="header-top header-top-default border-bottom-0 cp-topbar-bright-white" style="background-color: #dc3545;">
+            <div class="container">
+                <div class="header-row py-2">
+                    <div class="header-column justify-content-start">
+                        <div class="header-row">
+                            <nav class="header-nav-top">
+                                <ul class="nav nav-pills">
+                                    
+                                    
+                                    
+                                    @if(!empty($ws->contact_mobile))
+                                        <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
+                                            <span class="ws-nowrap text-light opacity-7">
+                                                <i class="fas fa-phone"></i>
+                                                <a class="text-light opacity-7 text-decoration-none" href="tel:{{ $ws->contact_mobile }}">{{ $ws->contact_mobile }}</a>
+                                            </span>
+                                        </li>
+                                    @endif
+                                    @if(!empty($ws->contact_email))
+                                        <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
+                                            <span class="ws-nowrap text-light opacity-7">
+                                                <i class="far fa-envelope"></i>
+                                                <a class="text-light opacity-7 text-decoration-none" href="mailto:{{ $ws->contact_email }}">{{ $ws->contact_email }}</a>
+                                            </span>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="header-column justify-content-end">
+                        <div class="header-row">
+                            <nav class="header-nav-top">
+                                <ul class="nav nav-pills text-uppercase text-2">
+                                    @php
+                                        $aboutMenuTop = collect($headerMenus ?? [])->firstWhere('id', 5);
+                                        $aboutTopUrl = '#';
+
+                                        if ($aboutMenuTop) {
+                                            if (!empty($aboutMenuTop->link)) {
+                                                $aboutTopUrl = $aboutMenuTop->link;
+                                            } elseif (!empty($aboutMenuTop->pages)) {
+                                                $firstAboutPage = collect($aboutMenuTop->latestPages())->first();
+                                                if ($firstAboutPage) {
+                                                    $aboutTopUrl = !empty($firstAboutPage->link)
+                                                        ? $firstAboutPage->link
+                                                        : route('page', ['id' => $firstAboutPage->id, 'slug' => page_slug($firstAboutPage->name)]);
+                                                }
+                                            }
+                                        }
+
+                                        $contactTopUrl = '#';
+                                        if (!empty($contactUsPage)) {
+                                            $contactTopUrl = !empty($contactUsPage->link)
+                                                ? $contactUsPage->link
+                                                : route('page', ['id' => $contactUsPage->id, 'slug' => page_slug($contactUsPage->name)]);
+                                        }
+                                    @endphp
+                                    <li class="nav-item nav-item-anim-icon d-none d-md-block">
+                                        <a class="nav-link ps-0 text-light opacity-7" href="{{ $aboutTopUrl }}"><i class="fas fa-angle-right"></i> About Us</a>
+                                    </li>
+                                    <li class="nav-item nav-item-anim-icon d-none d-md-block">
+                                        <a class="nav-link text-light opacity-7 pe-0" href="{{ $contactTopUrl }}"><i class="fas fa-angle-right"></i> Contact Us</a>
+                                    </li>
+                                    @guest
+                                        <li class="nav-item nav-item-anim-icon d-none d-md-block">
+                                            <a class="nav-link text-light opacity-7 pe-0" href="{{ route('login') }}">
+                                                <i class="fas fa-user"></i> Login
+                                            </a>
+                                        </li>
+                                    @endguest
+                                </ul>
+                            </nav>
+                            <ul class="header-social-icons social-icons d-none d-sm-block social-icons-clean">
+                                @if(!empty($ws->fb_url))
+                                    <li class="social-icons-facebook"><a class="text-light opacity-7" href="{{ $ws->fb_url }}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                                @endif
+                                @if(!empty($ws->twitter_url))
+                                    <li class="social-icons-twitter"><a class="text-light opacity-7" href="{{ $ws->twitter_url }}" target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                                @endif
+                                @if(!empty($ws->linkedin_url))
+                                    <li class="social-icons-linkedin"><a class="text-light opacity-7" href="{{ $ws->linkedin_url }}" target="_blank" rel="noopener" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="header-container header-container-md container">
             <div class="header-row">
                 <div class="header-column">
@@ -10,7 +137,7 @@
                         </div>
                          @else
                             <div class="header-logo">
-                                <a href="{{ url('/') }}"><img class="rounded" alt="Matson" width="260" height="72" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
+                                <a href="{{ url('/') }}"><img class="rounded" alt="Matson" width="220" height="72" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
                             </div>
                          @endif
                         
@@ -152,9 +279,12 @@
                         </div>
 
                         
+                        {{-- Cart button hidden as requested --}}
+                        {{--
                         <div class="header-nav-features header-nav-features-no-border header-nav-features-lg-show-border order-1 order-lg-2 me-2 me-lg-0">
                            @include('frontend::welcome.includes.headerCart')
                         </div>
+                        --}}
 
                     </div>
                 </div>

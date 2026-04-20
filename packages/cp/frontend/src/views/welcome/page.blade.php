@@ -28,6 +28,11 @@
                     <div class="card-body shadow-lg rounded">
                         <form  action="{{ route('contactUs')}}" method="POST">
                             @csrf
+                            <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+                                <label for="hp_website">Website</label>
+                                <input type="text" name="hp_website" id="hp_website" tabindex="-1" autocomplete="off" value="">
+                            </div>
+                            <input type="hidden" name="hp_time" value="{{ now()->timestamp }}">
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     Please fill all the fields

@@ -66,6 +66,7 @@
           @includeIf('advertisementspace::admin.layouts.adminAdvertisementSpaceLeftSidebar')
           @includeIf('jobpost::admin.layouts.adminJobPostLeftSidebar')
           @includeIf('websitesetting::admin.layouts.adminWebsiteSettingLeftSidebar')
+          @includeIf('frontend::admin.layouts.adminFrontendLeftSidebar')
         
 
                  
