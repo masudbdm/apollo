@@ -58,7 +58,7 @@
                         <div class="card-body">
                             <div class="media border ">
                                 <div class="w3-display-container">
-                                    <img src="{{ route('imagecache', ['template' => 'original', 'filename' => $media->file_name]) }}" alt="John Doe" class="mr-1   rounded" style="width:100px;">
+                                    <img src="{{ route('imagecache', ['template' => 'ppmd', 'filename' => $media->file_name]) }}" alt="John Doe" class="mr-1   rounded" style="width:100px;">
                                 <div class="w3-display-topright"><a onclick="return confirm('Do you really want to delete this media?');" style="margin-right: 4px;margin-top: 3px;" class="btn btn-default btn-xs" title="Delete" href="{{ route('admin.mediaDelete',$media->id)}}"><i class="fa fa-times"></i></a></div>
 
                                 </div>

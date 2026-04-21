@@ -21,10 +21,16 @@
                         <div class="card shadow">
                             <div class="card-body">
                             <address>
-                                Matson Bd<br>
-                                21/A, Road-2, Block-A, <br>Aftab Nagar, Beside East West University Dhaka-1212<br>
-                                Phone: +8801759769897<br>
-                                Email: info@matson.com.bd
+                                {{ $ws->website_title ?? config('app.name') }}<br>
+                                @if($ws && !empty($ws->contact_address))
+                                    {!! nl2br(e($ws->contact_address)) !!}<br>
+                                @endif
+                                @if($ws && !empty($ws->contact_mobile))
+                                    Phone: {{ $ws->contact_mobile }}<br>
+                                @endif
+                                @if($ws && !empty($ws->contact_email))
+                                    Email: {{ $ws->contact_email }}
+                                @endif
                             </address>
                             </div>
                         </div>

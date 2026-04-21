@@ -1,5 +1,5 @@
 @extends('frontend::layouts.frontendMaster')
-@section('title','Matson')
+@section('title',$ws->website_title)
 
 
 @section('content') 

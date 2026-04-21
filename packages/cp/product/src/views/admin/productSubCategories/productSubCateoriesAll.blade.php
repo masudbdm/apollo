@@ -51,6 +51,7 @@
                     <th style="width: 10px">#SL</th>
                     <th>Action</th>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Image</th>
                     <th>Status</th>
                   </tr>
@@ -77,6 +78,7 @@
                           </div>
                     </td>
                     <td>{{$subCategory->name}}</td>
+                    <td>{{ $subCategory->productCategory->name ?? '-' }}</td>
                     <td>
                         <img  src="{{ route('imagecache', ['template' => 'ppsm', 'filename' => $subCategory->fi()]) }}" alt="post">
                     </td>

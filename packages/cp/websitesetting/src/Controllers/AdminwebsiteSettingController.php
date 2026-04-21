@@ -34,7 +34,6 @@ class AdminWebsiteSettingController extends Controller
         $ws->meta_author = $request->meta_author;
         $ws->meta_description = $request->meta_description;
         $ws->footer_copyright = $request->footer_copyright;
-        $ws->website_url = $request->website_url;
         $ws->fb_url = $request->fb_url;
         $ws->instagram_url = $request->instagram_url;
         $ws->linkedin_url = $request->linkedin_url;
@@ -46,19 +45,10 @@ class AdminWebsiteSettingController extends Controller
 
 
 
-        $ws->footer_bottom_bg_color = $request->footer_bottom_bg_color;
-        $ws->footer_bottom_text_color = $request->footer_bottom_text_color;
         $ws->footer_contact = $request->footer_contact;
         $ws->footer_address = $request->footer_address;
 
 
-
-        //For SEO START
-        $ws->twitter_title = $request->twitter_title;
-        $ws->twitter_description = $request->twitter_description;
-        $ws->twitter_creator = $request->twitter_creator;
-        $ws->og_title = $request->og_title;
-        $ws->og_description = $request->og_description;
 
         $ws->editedby_id = Auth::id();
 

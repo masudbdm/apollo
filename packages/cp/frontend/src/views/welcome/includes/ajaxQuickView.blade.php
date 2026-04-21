@@ -33,6 +33,10 @@
 
 			<div class="summary entry-summary position-relative">
 
+				@php
+					$hasPrice = !blank($product->price) && floatval($product->price) > 0;
+				@endphp
+
 				<h1 class="mb-0 font-weight-bold text-7">
 						{{ $product->name }}
 				</h1>
@@ -42,34 +46,45 @@
 					<hr class="bg-color-grey-scale-4">
 				</div>
 
-				<p class="price mb-3">
-					
-					<span class="amount">{{ $product->price }}Tk</span>
-				</p>
+				@if($hasPrice)
+					<p class="price mb-3">
+						<span class="amount">{{ $product->price }}Tk</span>
+					</p>
+				@else
+					<div class="alert alert-info mb-3">
+						<div class="font-weight-semibold mb-1">Contact Us</div>
+						@if($ws && !empty($ws->contact_mobile))
+							<div class="mb-1">
+								Mobile:
+								<a class="text-decoration-none" href="tel:{{ preg_replace('/\s+/', '', $ws->contact_mobile) }}">
+									{{ $ws->contact_mobile }}
+								</a>
+							</div>
+						@endif
+						@if($ws && !empty($ws->contact_email))
+							<div>
+								Email:
+								<a class="text-decoration-none" href="mailto:{{ $ws->contact_email }}">{{ $ws->contact_email }}</a>
+							</div>
+						@endif
+					</div>
+				@endif
 
 				<p class="text-3-5 mb-3">{!! $product->description !!}</p>
 
 				
 
-				<form  method="post" class="cart" action="{{ route('addToCart')}}">
-					@csrf
-					 <input type="hidden" value="{{ $product->id}}" name="product_id">
-					<hr>
-					<div class="quantity quantity-lg">
-						<input type="text" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
-					</div>
-					<button type="submit" class="btn btn-dark btn-modern text-uppercase bg-color-hover-primary border-color-hover-primary">Add to cart</button>
-					<hr>
-				</form>
-
 				<div class="d-flex align-items-center">
 					<ul class="social-icons social-icons-medium social-icons-clean-with-border social-icons-clean-with-border-border-grey social-icons-clean-with-border-icon-dark me-3 mb-0">
 						<!-- Facebook -->
+						@if($ws && !empty($ws->fb_url))
 						<li class="social-icons-facebook">
-							<a href="https://www.facebook.com/matson.com.bd" target="_blank" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top" title="Share On Facebook">
+							<a href="{{ $ws->fb_url }}" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top" title="Share On Facebook">
 								<i class="fab fa-facebook-f"></i>
 							</a>
 						</li>
+						@endif
+	
 						
 						
 						

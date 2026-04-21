@@ -51,6 +51,7 @@
                     <th style="width: 10px">#SL</th>
                     <th>Action</th>
                     <th>Name</th>
+                    <th>Categories</th>
                     <th>Price</th>
                     <th>Except</th>
                     <th>Image</th>
@@ -85,6 +86,7 @@
                         </div>
                     </td>
                     <td>{{$product->name}}</td>
+                    <td>{{ $product->productCategories->pluck('name')->implode(', ') ?: '-' }}</td>
                     <td>{{$product->price}}</td>
                     <td>{{ Str::limit($product->excerpt, 70) }}</td>
                     <td>

@@ -78,16 +78,10 @@
                                             </div>
 
                                             <div class="form-group ">
-                                                <label for="footer_bottom_bg_color" class="control-label"> Footer Bottom Bg Color </label>
-                                                <input type="text" name="footer_bottom_bg_color" class="form-control" value="{{ old('footer_bottom_bg_color') ?: $ws->footer_bottom_bg_color ?? '' }}" id="footer_bottom_bg_color" placeholder="Enter footer bottom bg color">
-
+                                                <label for="footer_copyright" class="control-label">Footer Copyright Text</label>
+                                                <textarea name="footer_copyright" class="form-control" rows="4" id="footer_copyright" placeholder="Copyright text in footer area">{{ old('footer_copyright') ?: $ws->footer_copyright ?? '' }}</textarea>
                                             </div>
-
-                                            <div class="form-group ">
-                                                <label for="footer_bottom_text_color" class="control-label"> Footer Bottom Text Color
-                                                </label>
-                                                <input type="text" name="footer_bottom_text_color" class="form-control" value="{{ old('footer_bottom_text_color') ?: $ws->footer_bottom_text_color ?? '' }}" id="footer_bottom_text_color" placeholder="Enter footer bottom text color">
-                                            </div>
+                                            
 
 
                                         </div>
@@ -111,15 +105,7 @@
                                                 <textarea name="meta_description" class="form-control" rows="4" id="meta_description" placeholder="Meta Description for SEO of Website">{{ old('meta_description') ?: $ws->meta_description ?? '' }}</textarea>
                                             </div>
 
-                                            <div class="form-group ">
-                                                <label for="footer_copyright" class="control-label">Footer Copyright Text</label>
-                                                <textarea name="footer_copyright" class="form-control" rows="4" id="footer_copyright" placeholder="Copyright text in footer area">{{ old('footer_copyright') ?: $ws->footer_copyright ?? '' }}</textarea>
-                                            </div>
-
-                                            <div class="form-group ">
-                                                <label for="website_url" class="control-label">Website URL</label>
-                                                <input type="text" name="website_url" class="form-control" value="{{ old('website_url') ?: $ws->website_url ?? '' }}" id="website_url" placeholder="https://example.com" autocomplete="off">
-                                            </div>
+                                            
 
 
                                             <div class="form-group ">
@@ -168,49 +154,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-header bg-info">SEO Part For Home Page</div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12 col-md-6">
-                                                    <fieldset>
-                                                        <legend>Twitter Card data</legend>
-                                                        <div class="form-group">
-                                                            <label for="twitter_title">Twitter Title </small></label>
-                                                            <input type="text" name="twitter_title" value="{{ old('twitter_title') ?: $ws->twitter_title ?? '' }}" class="form-control  " id="twitter_title">
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="twitter_description">Twitter Description</label>
-                                                            <textarea name="twitter_description" id="twitter_description" cols="30" rows="3" class="form-control  ">{{ old('twitter_description') ?: $ws->twitter_description ?? '' }}</textarea>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="twitter_creator">Twitter Creator</label> <br>
-                                                            <input type="text" name="twitter_creator" value="{{ old('twitter_creator') ?: $ws->twitter_creator ?? '' }}" class="form-control  " id="twitter_creator">
-                                                        </div>
-                                                    </fieldset>
-
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <fieldset>
-                                                        <legend>Open Graph data</legend>
-                                                        <div class="form-group">
-                                                            <label for="og_title">OG Title </label>
-                                                            <input type="text" name="og_title" value="{{ old('og_title') ?: $ws->og_title ?? '' }}" class="form-control  " id="og_title">
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="og_description">OG Description</label>
-                                                            <textarea name="og_description" id="og_description" cols="30" rows="3" class="form-control  ">{{ old('og_description') ?: $ws->og_description ?? '' }}</textarea>
-                                                        </div>
-
-                                                    </fieldset>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
 

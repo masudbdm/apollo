@@ -141,11 +141,8 @@
             <div class="row">
                 <div class="col text-center">
                     <div class="cp-footer__bottom-text">
-                        @if(!empty($ws->footer_copyright))
-                            {!! $ws->footer_copyright !!}
-                        @else
-                            {{ date('Y') }} © All rights reserved.
-                        @endif
+                        
+                            {{ date('Y') }} © All rights reserved. developed by <a href="https://a2sys.co" target="_blank" rel="noopener">a2sys</a>
                     </div>
                 </div>
             </div>

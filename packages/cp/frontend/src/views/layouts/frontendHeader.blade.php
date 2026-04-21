@@ -133,11 +133,11 @@
                     <div class="header-row">
                          @if(Agent::isMobile())
                             <div class="header-logo">
-                            <a href="{{ url('/') }}"><img class="rounded" alt="Matson" width="200" height="60" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
+                            <a href="{{ url('/') }}"><img class="rounded" alt="{{ $ws->website_title }}" width="200" height="60" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
                         </div>
                          @else
                             <div class="header-logo">
-                                <a href="{{ url('/') }}"><img class="rounded" alt="Matson" width="220" height="72" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
+                                <a href="{{ url('/') }}"><img class="rounded" alt="{{ $ws->website_title }}" width="220" height="72" data-sticky-width="82" data-sticky-height="40" data-sticky-top="0" src="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->logo()]) }}"></a>
                             </div>
                          @endif
                         

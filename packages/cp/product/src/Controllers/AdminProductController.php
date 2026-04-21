@@ -29,7 +29,9 @@ class AdminProductController extends Controller
     public function productCategoriesAll()
     {
         menuSubmenu('product', 'productCategoriesAll');
-        $data['categories'] = $categories = ProductCategory::latest()->paginate(30);
+        $data['categories'] = $categories = ProductCategory::withCount('productSubcategories')
+            ->latest()
+            ->paginate(30);
         return view('product::admin.productCategories.productCategoriesAll', $data);
     }
 
@@ -141,7 +143,9 @@ class AdminProductController extends Controller
     public function productSubCategoriesAll()
     {
         menuSubmenu('product', 'productSubCategoriesAll');
-        $data['subCategories'] = $subCategories =  ProductSubCategory::latest()->paginate(30);
+        $data['subCategories'] = $subCategories = ProductSubCategory::with('productCategory')
+            ->latest()
+            ->paginate(30);
         return view('product::admin.productSubCategories.productSubCateoriesAll', $data);
     }
 
@@ -252,7 +256,9 @@ class AdminProductController extends Controller
     public function productsAll()
     {
         menuSubmenu('product', 'productsAll');
-        $data['products'] = $products = Product::latest()->paginate(30);
+        $data['products'] = $products = Product::with('productCategories')
+            ->latest()
+            ->paginate(30);
         return view('product::admin.products.productsAll', $data);
     }
 
