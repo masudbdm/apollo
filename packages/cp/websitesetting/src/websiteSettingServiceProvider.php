@@ -4,7 +4,7 @@ namespace Cp\WebsiteSetting;
 
 use Illuminate\Support\ServiceProvider;
 
-class websiteSettingServiceProvider extends ServiceProvider
+class WebsiteSettingServiceProvider extends ServiceProvider
 {
     //https://github.com/gocanto/gocanto-pkg
     //https://laravel.com/docs/5.2/packages

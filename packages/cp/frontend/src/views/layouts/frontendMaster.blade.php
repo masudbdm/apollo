@@ -10,6 +10,43 @@
         <!-- Mobile Metas -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
 
+        @php
+            $metaTitle = trim($__env->yieldContent('meta_title'))
+                ?: trim($__env->yieldContent('title'))
+                ?: ($ws->website_title ?? config('app.name'));
+
+            $metaDescription = trim($__env->yieldContent('meta_description'))
+                ?: ($ws->meta_description ?? '');
+
+            $metaUrl = trim($__env->yieldContent('meta_url')) ?: url()->current();
+
+            $defaultImageFilename = optional($ws)->logo() ?: 'logo.png';
+            $metaImage = trim($__env->yieldContent('meta_image'))
+                ?: route('imagecache', ['template' => 'original', 'filename' => $defaultImageFilename]);
+        @endphp
+
+        {{-- Primary SEO --}}
+        <link rel="canonical" href="{{ $metaUrl }}">
+        <meta name="title" content="{{ $metaTitle }}">
+        <meta name="description" content="{{ $metaDescription }}">
+        @if(!empty($ws) && !empty($ws->meta_author))
+            <meta name="author" content="{{ $ws->meta_author }}">
+        @endif
+
+        {{-- Open Graph (Facebook/WhatsApp/LinkedIn) --}}
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ $ws->website_title ?? config('app.name') }}">
+        <meta property="og:title" content="{{ $metaTitle }}">
+        <meta property="og:description" content="{{ $metaDescription }}">
+        <meta property="og:url" content="{{ $metaUrl }}">
+        <meta property="og:image" content="{{ $metaImage }}">
+
+        {{-- Twitter --}}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $metaTitle }}">
+        <meta name="twitter:description" content="{{ $metaDescription }}">
+        <meta name="twitter:image" content="{{ $metaImage }}">
+
 
 		<!-- Favicon -->
 		<link rel="shortcut icon" href="{{ route('imagecache', ['template' => 'original', 'filename' => $ws->favicon()]) }}" type="image/x-icon" />
