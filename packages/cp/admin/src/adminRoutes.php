@@ -45,4 +45,9 @@ Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'admin'], function ()
         Artisan::call('optimize:clear');
         return back();
     })->name('clear_cache');
+
+    Route::get('/run-migrate', function () {
+        \Artisan::call('migrate', ['--force' => true]);
+        return 'Migration done';
+    });
 });

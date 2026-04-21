@@ -28,6 +28,7 @@ class AdminWebsiteSettingController extends Controller
 
         // dd($request->all());
         $ws->website_title = $request->website_title;
+        $ws->slogan = $request->slogan;
         $ws->google_search_console = $request->google_search_console;
         $ws->google_analytics_code = $request->google_analytics_code;
         $ws->facebook_pixel_code = $request->facebook_pixel_code;

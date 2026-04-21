@@ -43,6 +43,11 @@
                                             </div>
 
                                             <div class="form-group ">
+                                                <label for="slogan" class="control-label">Topbar Slogan</label>
+                                                <input type="text" name="slogan" class="form-control" value="{{ old('slogan') ?: $ws->slogan ?? '' }}" id="slogan" placeholder="Slogan shown on topbar (left side)" autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group ">
                                                 <label for="google_search_console" class="control-label"> Google Search Console
                                                     Code
                                                 </label>
@@ -75,11 +80,6 @@
                                                 <label for="footer_contact" class="control-label"> Footer Contact
                                                 </label>
                                                 <textarea name="footer_contact" class="form-control" rows="2" id="footer_contact" placeholder="Enter Footer contact">{{ old('footer_contact') ?: $ws->footer_contact ?? '' }}</textarea>
-                                            </div>
-
-                                            <div class="form-group ">
-                                                <label for="footer_copyright" class="control-label">Footer Copyright Text</label>
-                                                <textarea name="footer_copyright" class="form-control" rows="4" id="footer_copyright" placeholder="Copyright text in footer area">{{ old('footer_copyright') ?: $ws->footer_copyright ?? '' }}</textarea>
                                             </div>
                                             
 

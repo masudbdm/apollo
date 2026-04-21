@@ -40,88 +40,49 @@
     <div class="header-body border-top-0 box-shadow-none">
         <div class="header-top header-top-default border-bottom-0 cp-topbar-bright-white" style="background-color: #dc3545;">
             <div class="container">
-                <div class="header-row py-2">
-                    <div class="header-column justify-content-start">
-                        <div class="header-row">
+                <div class="header-row py-2 flex-nowrap justify-content-between align-items-center">
+                    <div class="header-column justify-content-start flex-grow-1 overflow-hidden">
+                        <div class="header-row overflow-hidden">
                             <nav class="header-nav-top">
-                                <ul class="nav nav-pills">
-                                    
-                                    
-                                    
-                                    @if(!empty($ws->contact_mobile))
-                                        <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
-                                            <span class="ws-nowrap text-light opacity-7">
-                                                <i class="fas fa-phone"></i>
-                                                <a class="text-light opacity-7 text-decoration-none" href="tel:{{ $ws->contact_mobile }}">{{ $ws->contact_mobile }}</a>
-                                            </span>
-                                        </li>
-                                    @endif
-                                    @if(!empty($ws->contact_email))
-                                        <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
-                                            <span class="ws-nowrap text-light opacity-7">
-                                                <i class="far fa-envelope"></i>
-                                                <a class="text-light opacity-7 text-decoration-none" href="mailto:{{ $ws->contact_email }}">{{ $ws->contact_email }}</a>
-                                            </span>
-                                        </li>
-                                    @endif
+                                <ul class="nav nav-pills flex-nowrap w-100">
+                                    <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-sm-show">
+                                        <span class="ws-nowrap text-light opacity-7 d-block text-truncate" style="max-width: 100%;">
+                                            {{ $ws->slogan ?? '' }}
+                                        </span>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
-                    <div class="header-column justify-content-end">
+                    <div class="header-column justify-content-end flex-shrink-0">
                         <div class="header-row">
                             <nav class="header-nav-top">
-                                <ul class="nav nav-pills text-uppercase text-2">
-                                    @php
-                                        $aboutMenuTop = collect($headerMenus ?? [])->firstWhere('id', 5);
-                                        $aboutTopUrl = '#';
-
-                                        if ($aboutMenuTop) {
-                                            if (!empty($aboutMenuTop->link)) {
-                                                $aboutTopUrl = $aboutMenuTop->link;
-                                            } elseif (!empty($aboutMenuTop->pages)) {
-                                                $firstAboutPage = collect($aboutMenuTop->latestPages())->first();
-                                                if ($firstAboutPage) {
-                                                    $aboutTopUrl = !empty($firstAboutPage->link)
-                                                        ? $firstAboutPage->link
-                                                        : route('page', ['id' => $firstAboutPage->id, 'slug' => page_slug($firstAboutPage->name)]);
-                                                }
-                                            }
-                                        }
-
-                                        $contactTopUrl = '#';
-                                        if (!empty($contactUsPage)) {
-                                            $contactTopUrl = !empty($contactUsPage->link)
-                                                ? $contactUsPage->link
-                                                : route('page', ['id' => $contactUsPage->id, 'slug' => page_slug($contactUsPage->name)]);
-                                        }
-                                    @endphp
-                                    <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                        <a class="nav-link ps-0 text-light opacity-7" href="{{ $aboutTopUrl }}"><i class="fas fa-angle-right"></i> About Us</a>
-                                    </li>
-                                    <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                        <a class="nav-link text-light opacity-7 pe-0" href="{{ $contactTopUrl }}"><i class="fas fa-angle-right"></i> Contact Us</a>
-                                    </li>
+                                <ul class="nav nav-pills text-uppercase text-2 flex-nowrap">
+                                    @if(!empty($ws->contact_email))
+                                        <li class="nav-item nav-item-anim-icon">
+                                            <a class="nav-link ps-0 text-light opacity-7" href="mailto:{{ $ws->contact_email }}" aria-label="Email">
+                                                <i class="far fa-envelope"></i>
+                                                <span class="d-none d-md-inline"> {{ $ws->contact_email }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
                                     @guest
-                                        <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                            <a class="nav-link text-light opacity-7 pe-0" href="{{ route('login') }}">
-                                                <i class="fas fa-user"></i> Login
+                                        <li class="nav-item nav-item-anim-icon">
+                                            <a class="nav-link text-light opacity-7 pe-0" href="{{ route('login') }}" aria-label="Login">
+                                                <i class="fas fa-user"></i>
+                                                <span class="d-none d-md-inline"> Login</span>
+                                            </a>
+                                        </li>
+                                    @else
+                                        <li class="nav-item nav-item-anim-icon">
+                                            <a class="nav-link text-light opacity-7 pe-0" href="{{ route('admin.dashboard') }}" aria-label="Account">
+                                                <i class="fas fa-user"></i>
+                                                <span class="d-none d-md-inline"> Account</span>
                                             </a>
                                         </li>
                                     @endguest
                                 </ul>
                             </nav>
-                            <ul class="header-social-icons social-icons d-none d-sm-block social-icons-clean">
-                                @if(!empty($ws->fb_url))
-                                    <li class="social-icons-facebook"><a class="text-light opacity-7" href="{{ $ws->fb_url }}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                                @endif
-                                @if(!empty($ws->twitter_url))
-                                    <li class="social-icons-twitter"><a class="text-light opacity-7" href="{{ $ws->twitter_url }}" target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a></li>
-                                @endif
-                                @if(!empty($ws->linkedin_url))
-                                    <li class="social-icons-linkedin"><a class="text-light opacity-7" href="{{ $ws->linkedin_url }}" target="_blank" rel="noopener" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
-                                @endif
-                            </ul>
                         </div>
                     </div>
                 </div>
