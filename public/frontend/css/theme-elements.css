@@ -14227,9 +14227,9 @@ html.boxed .nav-secondary.sticky-active {
 /* Scroll to Top */
 html .scroll-to-top {
 	transition: opacity 0.3s;
-	background: #404040;
-	border-radius: 4px 4px 0 0;
-	bottom: 0;
+	background: #dc3545;
+	border-radius: 10px;
+	bottom: 22px;
 	color: #FFF;
 	display: block;
 	height: 9px;
@@ -14242,19 +14242,27 @@ html .scroll-to-top {
 	min-width: 50px;
 	z-index: 1040;
 	font-size: 0.8em;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22), 0 8px 22px rgba(255, 61, 110, 0.28);
 }
 
 html .scroll-to-top:hover {
 	opacity: 1;
+	filter: saturate(1.15) brightness(1.06);
 }
 
 html .scroll-to-top.visible {
-	opacity: 0.75;
+	opacity: 0.88;
 }
 
 html .scroll-to-top span {
 	display: inline-block;
 	padding: 0 5px;
+}
+
+html .scroll-to-top i,
+html .scroll-to-top span {
+	color: #fff !important;
+	opacity: 1 !important;
 }
 
 html.lightbox-opened .scroll-to-top {
@@ -20120,5 +20128,225 @@ ul.team-list .team-item .thumb-info-social-icons {
 		font-size: 100px;
 		letter-spacing: 0;
 		line-height: 100px;
+	}
+}
+
+/* ----------------------------------------
+   Home About/Stats Section (Footer Top)
+----------------------------------------- */
+.cp-home-about {
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	color: #fff;
+}
+
+.cp-home-about__overlay {
+	background: linear-gradient(180deg, rgba(10, 20, 35, 0.55) 0%, rgba(10, 20, 35, 0.65) 55%, rgba(10, 20, 35, 0.75) 100%);
+}
+
+.cp-home-about__top .cp-home-about__kicker {
+	font-weight: 700;
+	letter-spacing: .18em;
+	font-size: 18px;
+	opacity: .95;
+}
+
+.cp-home-about__line {
+	width: 52px;
+	height: 3px;
+	margin: 10px auto 0;
+	background: rgba(255,255,255,.75);
+	border-radius: 99px;
+}
+
+.cp-home-about__counters .counter {
+	padding: 10px 0;
+}
+
+.cp-home-about__counters .counter i,
+.cp-home-about__counters .counter [class*="fa-"] {
+	display: inline-block;
+	font-size: 28px;
+	opacity: .9;
+	margin-bottom: 8px;
+}
+
+.cp-home-about__counters strong {
+	font-size: 36px;
+	line-height: 1.05;
+}
+
+.cp-home-about__counters label {
+	font-size: 13px;
+	opacity: .9;
+}
+
+.cp-home-about__card {
+	max-width: 1100px;
+	width: 100%;
+	margin: 0 auto;
+	background: rgba(255,255,255,.84);
+	color: #1a2433;
+	border-radius: 10px;
+	padding: 26px 28px;
+	box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+.cp-home-about__title {
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.cp-home-about__text {
+	font-size: 14px;
+	line-height: 1.8;
+	color: #3a4658;
+}
+
+.cp-home-about__more {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 120px;
+	height: 38px;
+	padding: 0 18px;
+	border-radius: 999px;
+	background: #dc3545;
+	color: #fff;
+	text-decoration: none;
+	font-weight: 700;
+	letter-spacing: .08em;
+}
+
+.cp-home-about__more:hover,
+.cp-home-about__more:focus {
+	background: #c82333;
+	color: #fff;
+	text-decoration: none;
+}
+
+.cp-home-about__hr {
+	margin: 18px 0 10px;
+	border: 0;
+	height: 1px;
+	background: rgba(26,36,51,.12);
+}
+
+.cp-home-about__pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
+	padding-top: 10px;
+}
+
+.cp-home-about__pills-wrap {
+	padding: 0 2px 2px;
+}
+
+.cp-home-about__pill {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 14px;
+	border-radius: 999px;
+	background: rgba(255,255,255,.18);
+	border: 1px solid rgba(255,255,255,.35);
+	color: #1a2433;
+	text-decoration: none;
+	font-size: 12px;
+	line-height: 1;
+	white-space: nowrap;
+	backdrop-filter: blur(4px);
+}
+
+.cp-home-about__pill--sub {
+	background: rgba(255,255,255,.55);
+	border-color: rgba(26,36,51,.18);
+}
+
+.cp-home-about__pill:hover,
+.cp-home-about__pill:focus {
+	background: rgba(220,53,69,.92);
+	border-color: rgba(220,53,69,.92);
+	color: #fff;
+	text-decoration: none;
+}
+
+@media (max-width: 991px) {
+	.cp-home-about__top .cp-home-about__kicker {
+		font-size: 16px;
+		letter-spacing: .14em;
+	}
+
+	.cp-home-about__counters .counter i,
+	.cp-home-about__counters .counter [class*="fa-"] {
+		font-size: 24px;
+		margin-bottom: 6px;
+	}
+
+	.cp-home-about__counters strong {
+		font-size: 32px;
+	}
+
+	.cp-home-about__card {
+		max-width: 100%;
+		border-radius: 12px;
+	}
+
+	.cp-home-about__pill {
+		padding: 9px 12px;
+	}
+}
+
+@media (max-width: 575px) {
+	.cp-home-about__line {
+		width: 44px;
+	}
+
+	.cp-home-about__counters .counter {
+		padding: 6px 0;
+	}
+
+	.cp-home-about__counters strong {
+		font-size: 28px;
+	}
+
+	.cp-home-about__counters label {
+		font-size: 12px;
+	}
+
+	.cp-home-about__card {
+		padding: 18px 16px;
+	}
+
+	.cp-home-about__title {
+		font-size: 18px;
+	}
+
+	.cp-home-about__text {
+		font-size: 13px;
+		line-height: 1.7;
+	}
+
+	.cp-home-about__more {
+		min-width: 132px;
+		height: 40px;
+	}
+
+	.cp-home-about__hr {
+		margin: 14px 0 8px;
+	}
+
+	.cp-home-about__pills {
+		gap: 8px;
+		justify-content: flex-start;
+		padding-top: 8px;
+	}
+
+	.cp-home-about__pill {
+		font-size: 12px;
 	}
 }

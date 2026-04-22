@@ -20,7 +20,6 @@
                     @php
                         $aboutMenu = collect($headerMenus ?? $footerMenus ?? [])->firstWhere('id', 5);
                     @endphp
-
                     @if($aboutMenu)
                         @if(!empty($aboutMenu->link))
                             <li><a href="{{ $aboutMenu->link }}">{{ $aboutMenu->name }}</a></li>
@@ -142,7 +141,7 @@
                 <div class="col text-center">
                     <div class="cp-footer__bottom-text">
                         
-                            {{ date('Y') }} © All rights reserved. developed by <a href="https://a2sys.co" target="_blank" rel="noopener">a2sys</a>
+                            {{ date('Y') }} © {{ $_SERVER['HTTP_HOST'] }} All rights reserved. developed by <a href="https://a2sys.co" target="_blank" rel="noopener">a2sys</a>
                     </div>
                 </div>
             </div>
