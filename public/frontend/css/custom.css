@@ -132,3 +132,13 @@
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.95rem;
 }
+
+/* Homepage hero carousel: red pagination dots */
+.homepage-carousel-red-dots.owl-carousel .owl-dots .owl-dot span {
+    background: rgba(220, 53, 69, 0.45);
+}
+
+.homepage-carousel-red-dots.owl-carousel .owl-dots .owl-dot.active span,
+.homepage-carousel-red-dots.owl-carousel .owl-dots .owl-dot:hover span {
+    background-color: #dc3545 !important;
+}

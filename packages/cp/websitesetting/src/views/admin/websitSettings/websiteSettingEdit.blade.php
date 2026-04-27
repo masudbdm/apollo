@@ -48,6 +48,16 @@
                                             </div>
 
                                             <div class="form-group ">
+                                                <label for="carousel_intro_title" class="control-label">Homepage carousel — intro heading</label>
+                                                <input type="text" name="carousel_intro_title" class="form-control" value="{{ old('carousel_intro_title') ?: $ws->carousel_intro_title ?? '' }}" id="carousel_intro_title" placeholder="Title below the homepage image slider" autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="carousel_intro_text" class="control-label">Homepage carousel — intro text</label>
+                                                <textarea name="carousel_intro_text" class="form-control" rows="2" id="carousel_intro_text" placeholder="Supporting text below the heading">{{ old('carousel_intro_text') ?: $ws->carousel_intro_text ?? '' }}</textarea>
+                                            </div>
+
+                                            <div class="form-group ">
                                                 <label for="google_search_console" class="control-label"> Google Search Console
                                                     Code
                                                 </label>

@@ -93,10 +93,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        @foreach ($pageItems as $item)
-                        <div class="col-sm-10 col-sm-offset-1">
-                                <div class="card card-widget mb-1">
+                        <div class="col-sm-12">
+                            <p class="text-muted mb-2"><i class="fas fa-arrows-alt-v"></i> Drag page parts to reorder</p>
+                            <div class="connectedSortable ui-sortable" id="sortablePageItems"
+                                data-url="{{ route('admin.pageItemSort') }}"
+                                data-page-id="{{ $pageItem->page_id }}">
+                                @foreach ($pageItems as $item)
+                                <div class="card card-widget mb-1 ui-sortable-handle text-dark" id="{{ $item->id }}">
                                     <div class="card-body">
+                                        <i title="Drag up or down" class="fas fa-arrows-alt-v" style="cursor: move"></i>
                                         SL: <b>{{ $loop->iteration }}</b>, &nbsp;
                                         Part Title: <b> {{ $item->name }}</b>, &nbsp;
 
@@ -113,13 +118,14 @@
                                             <a class="btn-primary btn btn-xs " href="{{ route('admin.pageItemEdit',$item->id) }}">Edit</a>
                                             &nbsp;
 
-                                            <a class="btn-danger btn btn-xs " onclick="return confirm('Do you really want to delete?');" 
+                                            <a class="btn-danger btn btn-xs " onclick="return confirm('Do you really want to delete?');"
                                             href="{{ route('admin.pageItemDelete',$item->id) }}">Delete</a>
                                         </div>
                                     </div>
                                 </div>
+                                @endforeach
+                            </div>
                         </div>
-                        @endforeach
                     </div>
 
 
@@ -199,7 +205,39 @@
 @push('js')
     <script>
          $( document ).ready(function() {
-         
+
+            $("#sortablePageItems").sortable({
+              connectWith: ".connectedSortable",
+              distance: 5,
+              delay: 300,
+              opacity: 0.6,
+              cursor: 'move',
+              update: function() {
+                  var order = $('#sortablePageItems').sortable('toArray'),
+                      url = $("#sortablePageItems").attr('data-url'),
+                      pageId = $("#sortablePageItems").attr('data-page-id');
+                  $.ajax({
+                      url: url,
+                      type: 'POST',
+                      cache: false,
+                      dataType: 'json',
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      },
+                      data: {
+                          page_id: pageId,
+                          sorted_data: order
+                      },
+                      success: function(response) {
+                          if (response.success == true) {} else {
+                              alert('fail');
+                          }
+                      },
+                      error: function() {}
+                  });
+              }
+            }).disableSelection();
+
             $(document).on('click', '.copyboard', function(e) {
             e.preventDefault();
 

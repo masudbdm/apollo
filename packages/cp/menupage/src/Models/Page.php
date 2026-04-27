@@ -21,6 +21,9 @@ class Page extends Model
 
     public function pageItems()
     {
-        return $this->hasMany(PageItem::class, 'page_id', 'id')->whereActive(true);
+        return $this->hasMany(PageItem::class, 'page_id', 'id')
+            ->whereActive(true)
+            ->orderBy('drag_id')
+            ->orderBy('id');
     }
 }

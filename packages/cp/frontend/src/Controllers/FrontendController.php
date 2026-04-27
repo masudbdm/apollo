@@ -103,6 +103,12 @@ class FrontendController extends Controller
         $data['front_sliders'] = Slider::whereActive(true)->take(5)->get();
         $carouselContainer = view('frontend::welcome.includes.carouselContent', $data)->render();
 
+        // Same home page as AppServiceProvider (id 1); eager-load pageItems ordered by drag_id via Page::pageItems()
+        $data['homePage'] = Page::with('pageItems')
+            ->whereActive(true)
+            ->where('id', 1)
+            ->first();
+
         $homepageContainer = view('frontend::welcome.includes.homepageContent', $data)->render();
 
         return response()->json([

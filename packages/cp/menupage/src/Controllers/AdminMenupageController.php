@@ -216,6 +216,8 @@ class AdminMenupageController extends Controller
         $pageItem->editor = $request->editor ?? 0;
         $pageItem->active = $request->active ?? 0;
         $pageItem->addedby_id = Auth::id();
+        $nextDrag = (int) PageItem::where('page_id', $request->page_id)->max('drag_id');
+        $pageItem->drag_id = $nextDrag + 1;
         $pageItem->save();
         toast('PageItem successfully created', 'success');
         return redirect()->back();
@@ -225,7 +227,7 @@ class AdminMenupageController extends Controller
 
     public function pageItemEdit(pageItem $pageItem)
     {
-        $data['pageItems'] = PageItem::where('page_id', $pageItem->page_id)->get();
+        $data['pageItems'] = PageItem::where('page_id', $pageItem->page_id)->orderBy('drag_id')->orderBy('id')->get();
         $data['pageItem'] =  $pageItem;
         $data['medias'] = Media::latest()->paginate(20);
         return view('menupage::admin.pageItems.pageItemEdit', $data);
@@ -259,5 +261,51 @@ class AdminMenupageController extends Controller
         $pageItem->delete();
         toast('PageItem successfully deleted', 'success');
         return redirect()->back();
+    }
+
+    public function pageItemSort(Request $request)
+    {
+        $validated = $request->validate([
+            'page_id' => 'required|numeric|exists:pages,id',
+            'sorted_data' => 'required|array|min:1',
+            'sorted_data.*' => 'required|numeric|exists:page_items,id',
+        ]);
+
+        $pageId = (int) $validated['page_id'];
+        $orderedIds = collect($validated['sorted_data'])->map(fn ($id) => (int) $id);
+
+        if ($orderedIds->count() !== $orderedIds->unique()->count()) {
+            return response()->json(['success' => false, 'message' => 'Duplicate page part ids.'], 422);
+        }
+
+        foreach ($orderedIds as $id) {
+            if (! PageItem::where('page_id', $pageId)->where('id', $id)->exists()) {
+                return response()->json(['success' => false, 'message' => 'Page part does not belong to this page.'], 422);
+            }
+        }
+
+        $position = 1;
+        foreach ($orderedIds as $id) {
+            DB::table('page_items')
+                ->where('page_id', $pageId)
+                ->where('id', $id)
+                ->update(['drag_id' => $position++]);
+        }
+
+        $restIds = PageItem::where('page_id', $pageId)
+            ->whereNotIn('id', $orderedIds->all())
+            ->orderBy('drag_id')
+            ->orderBy('id')
+            ->pluck('id');
+        foreach ($restIds as $id) {
+            DB::table('page_items')
+                ->where('page_id', $pageId)
+                ->where('id', $id)
+                ->update(['drag_id' => $position++]);
+        }
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

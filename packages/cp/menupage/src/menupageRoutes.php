@@ -131,4 +131,9 @@ Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageItemDelete',
         'as' => 'admin.pageItemDelete'
     ]);
+
+    Route::match(['get', 'post'], 'pageItem/sort', [
+        'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageItemSort',
+        'as' => 'admin.pageItemSort'
+    ]);
 });
