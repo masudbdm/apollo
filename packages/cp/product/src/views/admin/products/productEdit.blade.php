@@ -232,9 +232,111 @@
           </form>
       </div>
 
+      <div class="card card-outline card-success mt-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title mb-0">Extra product images</h3>
+              <a href="{{ route('admin.productImagesAll', $product->id) }}" class="btn btn-sm btn-outline-secondary">
+                  <i class="fa fa-external-link-alt"></i> Open full images page
+              </a>
+          </div>
+          <div class="card-body" style="background-color: rgba(128, 128, 128, 0.15);">
+              <p class="text-muted small mb-3">Gallery images for the product detail page (carousel). Upload one or more files — same as the dedicated images screen.</p>
+
+              <form method="post" action="{{ route('admin.productImageStore') }}" enctype="multipart/form-data" class="mb-4">
+                  @csrf
+                  <input type="hidden" name="product_id" value="{{ $product->id }}">
+                  <div class="form-row align-items-end">
+                      <div class="form-group col-md-8 mb-2 mb-md-0">
+                          <label for="product_images_edit">Add images</label>
+                          <input type="file" name="product_images[]" id="product_images_edit" class="form-control-file" multiple accept="image/*">
+                          @if($errors->has('product_images'))
+                              <span class="text-danger d-block"><strong>{{ $errors->first('product_images') }}</strong></span>
+                          @endif
+                      </div>
+                      <div class="form-group col-md-4 mb-0">
+                          <button type="submit" class="btn btn-success"><i class="fa fa-upload"></i> Upload</button>
+                      </div>
+                  </div>
+              </form>
+
+              @if($product->productImages->count() > 0)
+                  <div class="table-responsive">
+                      <table class="table table-bordered table-sm bg-white mb-0">
+                          <thead class="thead-light">
+                              <tr>
+                                  <th style="width:40px;">#</th>
+                                  <th>Preview</th>
+                                  <th style="width:140px;">Active</th>
+                                  <th style="width:160px;" class="text-center">Replace</th>
+                                  <th style="width:100px;" class="text-center">Delete</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @foreach ($product->productImages as $image)
+                                  <tr>
+                                      <td>{{ $loop->iteration }}</td>
+                                      <td>
+                                          <img src="{{ route('imagecache', ['template' => 'ppsm', 'filename' => $image->fi()]) }}" alt="" class="img-thumbnail" style="max-height: 80px;">
+                                      </td>
+                                      <td>
+                                          <input type="checkbox" name="toogle" data-url="{{ route('admin.productImageActive') }}" value="{{ $image->id }}" data-toggle="toggle" data-size="sm" {{ $image->active == 1 ? 'checked' : '' }} data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
+                                      </td>
+                                      <td class="text-center">
+                                          <a href="{{ route('admin.productImageEdit', $image->id) }}" class="btn btn-sm btn-outline-secondary" title="Replace image file">
+                                              <i class="fa fa-edit"></i> Replace
+                                          </a>
+                                      </td>
+                                      <td class="text-center">
+                                          <a href="{{ route('admin.productImageDelete', $image->id) }}"
+                                             class="btn btn-sm btn-danger"
+                                             title="Delete this image"
+                                             onclick="return confirm('Permanently delete this extra image?');">
+                                              <i class="fa fa-trash"></i>
+                                          </a>
+                                      </td>
+                                  </tr>
+                              @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+              @else
+                  <p class="text-muted mb-0"><em>No extra images yet. Upload above.</em></p>
+              @endif
+          </div>
+      </div>
+
     </section>
     <!-- /.content -->
 
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        $('input[name=toogle]').change(function () {
+            var that = $(this);
+            var url = that.attr('data-url');
+            var id = that.val();
+            var mode = that.prop('checked');
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    mode: mode,
+                    id: id,
+                },
+                success: function (response) {
+                    if (response.status) {
+                        alert(response.msg);
+                    } else {
+                        alert('Please try again');
+                    }
+                }
+            });
+        });
+    });
+</script>
+@endpush
 
 

@@ -380,6 +380,7 @@ class AdminProductController extends Controller
     public function productEdit(Product $product)
     {
         menuSubmenu('product', 'productsAll');
+        $product->load(['productImages', 'files']);
         $data['product'] =  $product;
         $data['categories'] = ProductCategory::latest()->get();
         $data['subCategories'] =  ProductSubCategory::latest()->get();

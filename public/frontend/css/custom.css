@@ -142,3 +142,55 @@
 .homepage-carousel-red-dots.owl-carousel .owl-dots .owl-dot:hover span {
     background-color: #dc3545 !important;
 }
+
+/* Product category / subcategory listing — red text links & hovers */
+.cp-product-listing-page .breadcrumb a {
+    color: #dc3545 !important;
+}
+.cp-product-listing-page .breadcrumb a:hover,
+.cp-product-listing-page .breadcrumb a:focus {
+    color: #bd2130 !important;
+}
+
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link {
+    color: #dc3545 !important;
+}
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link:before {
+    color: #dc3545 !important;
+    opacity: 0.85 !important;
+}
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link:hover,
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link:focus {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+}
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link:hover:before,
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link:focus:before {
+    color: #fff !important;
+}
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link.active {
+    color: #fff !important;
+    background-color: #c82333 !important;
+}
+.cp-product-listing-page aside.sidebar ul.nav-list li a.nav-link.active:before {
+    color: #fff !important;
+}
+
+.cp-product-listing-page .cp-category-product-card h2 a {
+    color: #dc3545 !important;
+}
+.cp-product-listing-page .cp-category-product-card h2 a:hover,
+.cp-product-listing-page .cp-category-product-card h2 a:focus {
+    color: #bd2130 !important;
+}
+
+.cp-product-listing-page .cp-category-product-card a.btn.btn-light.border {
+    color: #dc3545 !important;
+    border-color: #eeb8be !important;
+}
+.cp-product-listing-page .cp-category-product-card a.btn.btn-light.border:hover,
+.cp-product-listing-page .cp-category-product-card a.btn.btn-light.border:focus {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}

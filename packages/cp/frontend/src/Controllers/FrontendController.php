@@ -28,24 +28,77 @@ class FrontendController extends Controller
 
     public function productCategory(ProductCategory $cat, $slug)
     {
-        $data['cat'] = $cat;
-        return view('frontend::welcome.productCategory', $data);
+        $subcats = $cat->activeSubCats()
+            ->withCount(['products' => function ($q) {
+                $q->where('active', true);
+            }])
+            ->orderBy('name')
+            ->get();
+
+        $products = $cat->products()
+            ->where('products.active', true)
+            ->orderBy('products.name')
+            ->paginate(9);
+
+        return view('frontend::welcome.productCategory', [
+            'cat' => $cat,
+            'subcats' => $subcats,
+            'products' => $products,
+        ]);
     }
 
     public function productSubCategory(ProductSubCategory $subcat, $slug)
     {
-        $data['subcat'] = $subcat;
-        return view('frontend::welcome.productSubCategory', $data);
+        $subcat->loadMissing('productCategory');
+
+        $cat = $subcat->productCategory;
+
+        $subcats = $cat
+            ? $cat->activeSubCats()
+                ->withCount(['products' => function ($q) {
+                    $q->where('active', true);
+                }])
+                ->orderBy('name')
+                ->get()
+            : collect();
+
+        $products = $subcat->products()
+            ->where('products.active', true)
+            ->orderBy('products.name')
+            ->paginate(9);
+
+        return view('frontend::welcome.productSubCategory', [
+            'cat' => $cat,
+            'subcat' => $subcat,
+            'subcats' => $subcats,
+            'products' => $products,
+        ]);
     }
 
 
     public function singleProduct(Product $product, $slug)
     {
-        $data['product'] = $product;
-        $poductCategories = $product->productCategories->pluck('id');
-        $productIds = DB::table('product_cats')->whereIn('product_category_id', $poductCategories)->take(8)->pluck('product_id');
-        $data['relatedProducts'] = Product::find($productIds);
-        return view('frontend::welcome.singleProduct', $data);
+        $product->load(['files', 'productCategories', 'productImages']);
+
+        $categoryIds = $product->productCategories->pluck('id');
+        $productIds = DB::table('product_cats')
+            ->whereIn('product_category_id', $categoryIds)
+            ->where('product_id', '!=', $product->id)
+            ->take(12)
+            ->pluck('product_id')
+            ->unique()
+            ->values();
+
+        $relatedProducts = Product::query()
+            ->where('active', true)
+            ->whereIn('id', $productIds)
+            ->take(8)
+            ->get();
+
+        return view('frontend::welcome.singleProduct', [
+            'product' => $product,
+            'relatedProducts' => $relatedProducts,
+        ]);
     }
 
 
@@ -57,9 +110,9 @@ class FrontendController extends Controller
                 $q->orWhere('name', 'like', '%' . $request->search . '%')
                     ->orWhere('price', 'like', '%' . $request->search . '%');
             })
-            ->simplePaginate(15);
+            ->orderBy('name')
+            ->paginate(9);
 
-   
         return view('frontend::welcome.productSearch', $data);
     }
 

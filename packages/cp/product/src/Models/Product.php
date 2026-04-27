@@ -26,7 +26,7 @@ class Product extends Model
 
     public function files()
     {
-        return $this->hasMany(ProductFile::class);
+        return $this->hasMany(ProductFile::class)->orderBy('id');
     }
 
     public function productImages()
