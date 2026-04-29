@@ -1,47 +1,385 @@
 @extends('layouts.app')
 
+@push('css')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        :root {
+            --bg-0: #07060a;
+            --bg-1: #0d0710;
+            --text: rgba(255, 255, 255, .92);
+            --muted: rgba(255, 255, 255, .66);
+            --danger: #ff2d55;
+            --danger-2: #ff0033;
+            --shadow: 0 24px 80px rgba(0, 0, 0, .55);
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            margin: 0;
+            color: var(--text);
+            background: radial-gradient(1200px 700px at 70% -10%, rgba(255, 0, 64, .26), transparent 55%),
+                radial-gradient(900px 600px at 10% 0%, rgba(255, 45, 85, .22), transparent 55%),
+                linear-gradient(180deg, var(--bg-1), var(--bg-0));
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -40vmax;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            background: conic-gradient(from 0deg at 50% 50%,
+                    transparent,
+                    rgba(255, 0, 64, .16),
+                    transparent,
+                    rgba(255, 45, 85, .12),
+                    transparent);
+            filter: blur(40px);
+            opacity: .9;
+            animation: apolloSpin 16s linear infinite;
+        }
+
+        body::after {
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .06), transparent 55%);
+            filter: blur(10px);
+            opacity: .8;
+            animation: apolloPulse 5.5s ease-in-out infinite;
+        }
+
+        @keyframes apolloSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes apolloPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .65;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: .95;
+            }
+        }
+
+        .auth-shell {
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 3rem);
+            display: grid;
+            place-items: center;
+            padding: 40px 16px;
+        }
+
+        .auth-card {
+            width: min(560px, 100%);
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .06));
+            border: 1px solid rgba(255, 255, 255, .16);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transform: translateY(6px);
+            opacity: 0;
+            animation: cardIn .7s cubic-bezier(.2, .8, .2, 1) forwards;
+        }
+
+        @keyframes cardIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .auth-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(115deg,
+                    rgba(255, 255, 255, .20) 0%,
+                    rgba(255, 255, 255, .06) 28%,
+                    rgba(255, 0, 64, .12) 55%,
+                    rgba(255, 255, 255, .04) 75%,
+                    rgba(255, 255, 255, .14) 100%);
+            opacity: .55;
+            transform: translateX(-30%) translateY(-20%);
+            animation: glazeSweep 7.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glazeSweep {
+            0%,
+            100% {
+                transform: translateX(-35%) translateY(-22%) rotate(-6deg);
+                opacity: .45;
+            }
+
+            50% {
+                transform: translateX(18%) translateY(6%) rotate(6deg);
+                opacity: .7;
+            }
+        }
+
+        .auth-card__inner {
+            position: relative;
+            padding: 28px 28px 20px;
+        }
+
+        .brand {
+            display: grid;
+            justify-items: center;
+            gap: 12px;
+            padding-top: 6px;
+        }
+
+        .brand__mark {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .22), transparent 55%),
+                linear-gradient(135deg, rgba(255, 0, 64, .95), rgba(255, 45, 85, .55));
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .35), 0 0 0 10px rgba(255, 0, 64, .06);
+            border: 1px solid rgba(255, 255, 255, .14);
+        }
+
+        .title {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: .2px;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0;
+            margin-top: -6px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            max-width: 44ch;
+        }
+
+        .form {
+            margin-top: 22px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .label {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .2px;
+        }
+
+        .control {
+            position: relative;
+        }
+
+        .input {
+            width: 100%;
+            height: 46px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            background: rgba(10, 8, 14, .38);
+            color: var(--text);
+            padding: 12px 14px;
+            outline: none;
+            transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+        }
+
+        .input::placeholder {
+            color: rgba(255, 255, 255, .45);
+        }
+
+        .input:focus {
+            border-color: rgba(255, 0, 64, .55);
+            box-shadow: 0 0 0 4px rgba(255, 0, 64, .18), 0 16px 40px rgba(0, 0, 0, .35);
+            background: rgba(10, 8, 14, .52);
+            transform: translateY(-1px);
+        }
+
+        .invalid-feedback {
+            display: block;
+            margin-top: 6px;
+            color: rgba(255, 120, 140, .95);
+            font-size: 12px;
+        }
+
+        .alert {
+            border-radius: 14px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            background: rgba(255, 255, 255, .08);
+            color: rgba(255, 255, 255, .88);
+            font-size: 13px;
+        }
+
+        .actions {
+            margin-top: 6px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            height: 46px;
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: .4px;
+            background: linear-gradient(90deg, var(--danger-2), var(--danger));
+            box-shadow: 0 14px 44px rgba(255, 0, 64, .22), 0 0 0 1px rgba(255, 0, 64, .14);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
+
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .35) 35%, transparent 70%);
+            transform: translateX(-120%) skewX(-18deg);
+            animation: shine 2.8s ease-in-out infinite;
+            opacity: .75;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0%,
+            55% {
+                transform: translateX(-120%) skewX(-18deg);
+            }
+
+            100% {
+                transform: translateX(120%) skewX(-18deg);
+            }
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 56px rgba(255, 0, 64, .30), 0 0 0 1px rgba(255, 0, 64, .18);
+            filter: saturate(1.04);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            position: relative;
+            padding: 14px 28px 22px;
+            border-top: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(0, 0, 0, .10);
+            text-align: center;
+        }
+
+        .link {
+            color: rgba(255, 255, 255, .82);
+            text-decoration: none;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, .85), transparent);
+            transform: scaleX(.28);
+            transform-origin: center;
+            opacity: .6;
+            transition: transform .15s ease, opacity .15s ease;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body::before,
+            body::after,
+            .auth-card,
+            .auth-card::before,
+            .btn-primary::before {
+                animation: none !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-card__inner">
+                <div class="brand">
+                    <div class="brand__mark" aria-hidden="true"></div>
+                    <h1 class="title">{{ __('Reset Password') }}</h1>
+                    <p class="subtitle">Enter your email and we’ll send you a reset link.</p>
                 </div>
+
+                @if (session('status'))
+                    <div class="alert" role="alert">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                <form class="form" method="POST" action="{{ route('password.email') }}" novalidate>
+                    @csrf
+
+                    <div class="field">
+                        <div class="label">{{ __('Email Address') }}</div>
+                        <div class="control">
+                            <input id="email" type="email" class="input @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                                inputmode="email" placeholder="name@example.com">
+                        </div>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn-primary">
+                            {{ __('Send Password Reset Link') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="footer">
+                <a class="link" href="{{ route('login') }}">Back to login</a>
             </div>
         </div>
     </div>
-</div>
 @endsection
