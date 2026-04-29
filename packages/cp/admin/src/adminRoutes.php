@@ -31,6 +31,7 @@ Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'admin'], function ()
 
 
     Route::get('dashboard', [
+        'middleware' => ['role:admin|editor'],
         'uses' => 'Cp\Admin\Controllers\AdminController@dashboard',
         'as' => 'admin.dashboard'
     ]);

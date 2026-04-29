@@ -28,6 +28,11 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['product-subcategory-create']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -80,7 +85,9 @@
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          @if($canCreate)
+            <button type="submit" class="btn btn-primary">Submit</button>
+          @endif
           </div>
 
         </form>

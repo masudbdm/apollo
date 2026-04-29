@@ -141,84 +141,104 @@
     <section class="content">
 
       @php
+        $user = auth()->user();
+        $can = function (string $permission) use ($user): bool {
+          return $user && method_exists($user, 'hasAnyPermission')
+            ? $user->hasAnyPermission([$permission])
+            : false;
+        };
+
         $cards = [
           [
             'title' => 'Users',
             'subtitle' => 'Manage users & access',
             'route' => 'admin.usersAll',
             'icon' => 'fas fa-users',
+            'permission' => 'user-show',
           ],
           [
             'title' => 'Product Categories',
             'subtitle' => 'Create & organize categories',
             'route' => 'admin.productCategoriesAll',
             'icon' => 'fas fa-tags',
+            'permission' => 'product-category-show',
           ],
           [
             'title' => 'Product Subcategories',
             'subtitle' => 'Create & organize subcategories',
             'route' => 'admin.productSubCategoriesAll',
             'icon' => 'fas fa-layer-group',
+            'permission' => 'product-subcategory-show',
           ],
           [
             'title' => 'Products',
             'subtitle' => 'All products list',
             'route' => 'admin.productsAll',
             'icon' => 'fas fa-box-open',
+            'permission' => 'product-show',
           ],
           [
             'title' => 'Orders',
             'subtitle' => 'View & manage orders',
             'route' => 'admin.orderList',
             'icon' => 'fas fa-receipt',
+            'permission' => 'order-show',
           ],
           [
             'title' => 'Contact Messages',
             'subtitle' => 'Website contact inbox',
             'route' => 'admin.contactMessages.index',
             'icon' => 'far fa-envelope',
+            'permission' => 'contact-message-show',
           ],
           [
             'title' => 'Website Settings',
             'subtitle' => 'Contact, logo, social links',
             'route' => 'admin.websitesetting',
             'icon' => 'fas fa-cog',
+            'permission' => 'website-setting-show',
           ],
           [
             'title' => 'Media Library',
             'subtitle' => 'Upload & manage media',
             'route' => 'admin.mediasAll',
             'icon' => 'far fa-images',
+            'permission' => 'media-show',
           ],
           [
             'title' => 'Blog Categories',
             'subtitle' => 'Manage blog categories',
             'route' => 'admin.blogCategoriesAll',
             'icon' => 'fas fa-folder-open',
+            'permission' => 'post-category-show',
           ],
           [
             'title' => 'Blog Posts',
             'subtitle' => 'Manage blog posts',
             'route' => 'admin.blogPostsAll',
             'icon' => 'far fa-newspaper',
+            'permission' => 'post-show',
           ],
           [
             'title' => 'Front Sliders',
             'subtitle' => 'Homepage sliders',
             'route' => 'admin.slidersAll',
             'icon' => 'fas fa-sliders-h',
+            'permission' => 'front-slider-show',
           ],
           [
             'title' => 'Menus',
             'subtitle' => 'Header/footer menus',
             'route' => 'admin.menusAll',
             'icon' => 'fas fa-bars',
+            'permission' => 'menu-show',
           ],
           [
             'title' => 'Pages',
             'subtitle' => 'Static pages & content',
             'route' => 'admin.pagesAll',
             'icon' => 'far fa-file-alt',
+            'permission' => 'page-show',
           ],
         ];
       @endphp
@@ -227,7 +247,7 @@
         <div class="card-body">
           <div class="quick-links-grid">
             @foreach($cards as $c)
-              @if(\Illuminate\Support\Facades\Route::has($c['route']))
+              @if(\Illuminate\Support\Facades\Route::has($c['route']) && (!isset($c['permission']) || $can($c['permission'])))
                 <a class="quick-card" href="{{ route($c['route']) }}">
                   <div class="qc-top">
                     <div class="qc-icon">

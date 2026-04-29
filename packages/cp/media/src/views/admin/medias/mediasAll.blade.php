@@ -7,6 +7,11 @@
 @endpush
 
 @section('content') 
+    @php
+      $u = auth()->user();
+      $canMediaCreate = $u && $u->hasAnyPermission(['media-create']);
+      $canMediaDelete = $u && $u->hasAnyPermission(['media-delete']);
+    @endphp
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -34,20 +39,22 @@
 
     <div class="card card-widget">
         <div class="card-header text-center">
-            <form class="form-inline" method="post" action="{{ route('admin.mediaStore') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group {{ $errors->has('files') ? ' has-error' : '' }}">
-                    <label for="file_name">Multiple Upload Image:</label>
-                    <input type="file" name="files[]" value="" placeholder="Files" class="form-control ml-1" id="files" style="padding-bottom: 32px;" multiple>
-                     @if ($errors->has('files'))
-                        <span class="help-block">
-                        <strong>{{ $errors->first('files') }}</strong>
-                        </span>
-                    @endif
-                </div>
-                <button type="submit" class="w3-btn w3-blue w3-round w3-border w3-border-white ml-1">Add Image</button>
+            @if($canMediaCreate)
+              <form class="form-inline" method="post" action="{{ route('admin.mediaStore') }}" enctype="multipart/form-data">
+                  @csrf
+                  <div class="form-group {{ $errors->has('files') ? ' has-error' : '' }}">
+                      <label for="file_name">Multiple Upload Image:</label>
+                      <input type="file" name="files[]" value="" placeholder="Files" class="form-control ml-1" id="files" style="padding-bottom: 32px;" multiple>
+                       @if ($errors->has('files'))
+                          <span class="help-block">
+                          <strong>{{ $errors->first('files') }}</strong>
+                          </span>
+                      @endif
+                  </div>
+                  <button type="submit" class="w3-btn w3-blue w3-round w3-border w3-border-white ml-1">Add Image</button>
 
-            </form>
+              </form>
+            @endif
         </div>
         <div class="card-body" style="background-color: rgba(128, 128, 128, 0.37)">
 
@@ -59,7 +66,11 @@
                             <div class="media border ">
                                 <div class="w3-display-container">
                                     <img src="{{ route('imagecache', ['template' => 'ppmd', 'filename' => $media->file_name]) }}" alt="John Doe" class="mr-1   rounded" style="width:100px;">
-                                <div class="w3-display-topright"><a onclick="return confirm('Do you really want to delete this media?');" style="margin-right: 4px;margin-top: 3px;" class="btn btn-default btn-xs" title="Delete" href="{{ route('admin.mediaDelete',$media->id)}}"><i class="fa fa-times"></i></a></div>
+                                @if($canMediaDelete)
+                                  <div class="w3-display-topright">
+                                    <a onclick="return confirm('Do you really want to delete this media?');" style="margin-right: 4px;margin-top: 3px;" class="btn btn-default btn-xs" title="Delete" href="{{ route('admin.mediaDelete',$media->id)}}"><i class="fa fa-times"></i></a>
+                                  </div>
+                                @endif
 
                                 </div>
                                 <div class="media-body" style=" word-wrap: break-word;word-break: break-all;">

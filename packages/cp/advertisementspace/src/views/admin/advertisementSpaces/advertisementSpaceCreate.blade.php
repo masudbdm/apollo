@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['ad-create']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h3 class="card-title">Create New Advetisment Space</h3>
@@ -98,7 +102,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canCreate)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

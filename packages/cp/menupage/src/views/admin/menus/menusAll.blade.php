@@ -25,6 +25,14 @@
 
  <section class="content">
 
+    @php
+      $u = auth()->user();
+      $canMenuCreate = $u && $u->hasAnyPermission(['menu-create']);
+      $canMenuShow = $u && $u->hasAnyPermission(['menu-show']);
+      $canMenuEdit = $u && $u->hasAnyPermission(['menu-edit']);
+      $canMenuDelete = $u && $u->hasAnyPermission(['menu-delete']);
+    @endphp
+
      <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -33,9 +41,10 @@
                 <a class="btn btn-primary btn-xs" href="{{ route('admin.menusAll') }}"> Back</a>
             </div>
         </div>
-        <form action="{{ route('admin.menuStore')}}" method="post">
-          @csrf
-          <div class="card-body">
+        @if($canMenuCreate)
+          <form action="{{ route('admin.menuStore')}}" method="post">
+            @csrf
+            <div class="card-body">
             <div class="card card-widget mb-0">
               <div class="card-body w3-gray">
                 <div class="card card-widget mb-0 text-dark">
@@ -73,11 +82,12 @@
               </div>
             </div>
           </div>
-          <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
 
-        </form>
+          </form>
+        @endif
         <!-- /.card-footer-->
       </div>
       <!-- /.card -->
@@ -97,7 +107,9 @@
                     @foreach ($menus as $menu)
                       <div class="card card-widget ui-sortable-handle text-dark" id="{{ $menu->id }}">
                         <div class="card-body">
-                          <i title="Drag up or down" class="fas fa-arrows-alt-v" style="cursor: pointer"></i>
+                          @if($canMenuEdit)
+                            <i title="Drag up or down" class="fas fa-arrows-alt-v" style="cursor: pointer"></i>
+                          @endif
                           Menu ID: <b>{{ $menu->id }}</b>,
                           Menu Name: <b> {{ $menu->name }}</b>,
                           Active:
@@ -122,13 +134,20 @@
                           @endforeach
                         
                            <div class="float-right d-flex">
-                              <a class="btn btn-success btn-sm mr-1" href="{{ route('admin.menuShow',$menu->id)}}">Show</a>
-                              <a class="btn btn-primary btn-sm mr-1" href="{{ route('admin.menuEdit',$menu->id)}}">Edit</a>
+                              @if($canMenuShow)
+                                <a class="btn btn-success btn-sm mr-1" href="{{ route('admin.menuShow',$menu->id)}}">Show</a>
+                              @endif
 
-                              <form action="{{ route('admin.menuDelete',$menu->id)}}" method="post" onclick="return confirm('Do you really want to delete?');">
-                                @csrf
-                                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                              </form>
+                              @if($canMenuEdit)
+                                <a class="btn btn-primary btn-sm mr-1" href="{{ route('admin.menuEdit',$menu->id)}}">Edit</a>
+                              @endif
+
+                              @if($canMenuDelete)
+                                <form action="{{ route('admin.menuDelete',$menu->id)}}" method="post" onclick="return confirm('Do you really want to delete?');">
+                                  @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                              @endif
                             </div>
 
 

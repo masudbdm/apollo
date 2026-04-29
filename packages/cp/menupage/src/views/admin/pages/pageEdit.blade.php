@@ -25,6 +25,11 @@
 
  <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canPageEdit = $u && $u->hasAnyPermission(['page-edit']);
+      @endphp
+
      <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -108,7 +113,9 @@
           </div>
 
           <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          @if($canPageEdit)
+            <button type="submit" class="btn btn-primary">Submit</button>
+          @endif
                {{-- link and copy start --}}
           &nbsp;
           @if($page->link)

@@ -8,6 +8,11 @@
 
 @section('content') 
 
+@php
+  $user = auth()->user();
+  $canEdit = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-edit']) : false;
+@endphp
+
 
     <section class="content-header">
       <div class="container-fluid">
@@ -31,7 +36,7 @@
           <div class="card-header bg-info">
               <h4 class="card-title">Edit Job Post</h4>
             <div class="card-tools">
-                <a class="btn btn-primary btn-xs" href="{{ route('admin.blogPostsAll') }}"> Back</a>
+                <a class="btn btn-primary btn-xs" href="{{ route('admin.jobPostsAll') }}"> Back</a>
             </div>
           </div>
 
@@ -147,7 +152,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canEdit)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

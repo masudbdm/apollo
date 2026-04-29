@@ -33,16 +33,18 @@
                 <div class="col-md-8 offset-md-2">
                     <div class="card shadow">
                         <div class="card-body">
-                            <form method="post" action="{{ route('admin.permissionStore') }}">
-                                @csrf
-                                <label for="permission">New Permission Create</label>
-                            <div class="input-group input-group-sm ">
-                              <input type="text" class="form-control" placeholder="Permission Name" name="name" value="{{ old('name') }}" aria-label="Permission Name" aria-describedby="basic-addon2">
-                              <div class="input-group-append">
-                                <button type="submit" class="input-group-text bg-primary" id="basic-addon2">Save</button>
-                              </div>
-                            </div>
-                            </form>
+                    @if(auth()->check() && auth()->user()->hasAnyPermission(['permission-create']))
+                        <form method="post" action="{{ route('admin.permissionStore') }}">
+                                    @csrf
+                                    <label for="permission">New Permission Create</label>
+                                <div class="input-group input-group-sm ">
+                                  <input type="text" class="form-control" placeholder="Permission Name" name="name" value="{{ old('name') }}" aria-label="Permission Name" aria-describedby="basic-addon2">
+                                  <div class="input-group-append">
+                                    <button type="submit" class="input-group-text bg-primary" id="basic-addon2">Save</button>
+                                  </div>
+                                </div>
+                                </form>
+                    @endif
  
 
                         </div>
@@ -84,16 +86,20 @@
                             <td>
                                  
 
-                                <a class="btn btn-primary btn-xs"
-                                    href="{{ route('admin.permissionEdit', $permission) }}">Edit</a>
+                                @if(auth()->check() && auth()->user()->hasAnyPermission(['permission-edit']))
+                                    <a class="btn btn-primary btn-xs"
+                                        href="{{ route('admin.permissionEdit', $permission) }}">Edit</a>
+                                @endif
 
-                                     <a href=""  onclick="event.preventDefault();
-                                                     document.getElementById('delete-form').submit();" 
-                                                     class="btn btn-danger btn-xs">Delete</a>
+                                     @if(auth()->check() && auth()->user()->hasAnyPermission(['permission-delete']))
+                                        <a href=""  onclick="event.preventDefault();
+                                                        document.getElementById('delete-form').submit();" 
+                                                        class="btn btn-danger btn-xs">Delete</a>
 
-                                 <form onsubmit="return confirm('Do you really want to delete this?');" id="delete-form" action="{{ route('admin.permissionDelete', $permission) }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                        <form onsubmit="return confirm('Do you really want to delete this?');" id="delete-form" action="{{ route('admin.permissionDelete', $permission) }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                     @endif
                                 
 
                             </td>

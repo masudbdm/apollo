@@ -85,7 +85,9 @@
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          @if(auth()->check() && auth()->user()->hasAnyPermission(['user-edit']))
+            <button type="submit" class="btn btn-primary">Submit</button>
+          @endif
           </div>
 
         </form>

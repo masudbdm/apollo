@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['post-create']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h3 class="card-title">Create New Bolg Post</h3>
@@ -181,7 +185,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canCreate)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

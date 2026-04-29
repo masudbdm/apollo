@@ -8,6 +8,13 @@
 
 @section('content') 
 
+@php
+  $user = auth()->user();
+  $canCreate = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-create']) : false;
+  $canEdit = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-edit']) : false;
+  $canDelete = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-delete']) : false;
+@endphp
+
 
     <section class="content-header">
       <div class="container-fluid">
@@ -35,7 +42,9 @@
 
           <div class="card-tools">
 
-             <a class="btn btn-primary btn-xs" href="{{ route('admin.jobPostCreate') }}"> Create New Job Post</a>
+             @if($canCreate)
+              <a class="btn btn-primary btn-xs" href="{{ route('admin.jobPostCreate') }}"> Create New Job Post</a>
+             @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -72,13 +81,17 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route("admin.jobPostEdit",$jobPost->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @if($canEdit)
+                              <a href="{{ route("admin.jobPostEdit",$jobPost->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @endif
 
 
-                            <form action="{{route('admin.jobPostDelete',$jobPost->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                              @csrf
-                              <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
+                            @if($canDelete)
+                              <form action="{{route('admin.jobPostDelete',$jobPost->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                @csrf
+                                <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                              </form>
+                            @endif
 
                             <a href="{{ route("admin.dropAllCv",$jobPost->id)}}" class="dropdown-item"><i class="fa fa-file"></i> Drop All Cv</a>
 
@@ -96,7 +109,11 @@
                   </td>
 
                   <td>
-                      <input type="checkbox" name="toogle" data-url="{{route('admin.jobPostActive')}}" value="{{$jobPost->id}}" data-toggle="toggle" data-size="sm" {{$jobPost->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                      @if($canEdit)
+                        <input type="checkbox" name="toogle" data-url="{{route('admin.jobPostActive')}}" value="{{$jobPost->id}}" data-toggle="toggle" data-size="sm" {{$jobPost->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                      @else
+                        {{ $jobPost->active == 1 ? 'On' : 'Off' }}
+                      @endif
                   </td>
                 </tr>  
                 @endforeach

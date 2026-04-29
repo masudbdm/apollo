@@ -5,6 +5,13 @@
 @endsection
 
 @section('content')
+    @php
+        $user = auth()->user();
+        $canDelete = $user && method_exists($user, 'hasAnyPermission')
+            ? $user->hasAnyPermission(['contact-message-delete'])
+            : false;
+    @endphp
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -33,7 +40,9 @@
                             </form>
                         </div>
                         <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                            <button type="button" class="btn btn-danger" id="bulkDeleteBtn" disabled>Bulk Delete</button>
+                            @if($canDelete)
+                                <button type="button" class="btn btn-danger" id="bulkDeleteBtn" disabled>Bulk Delete</button>
+                            @endif
                             <button type="button" class="btn btn-secondary" id="bulkPrintBtn" disabled>Bulk Print</button>
                         </div>
                     </div>
@@ -74,10 +83,12 @@
                                         </td>
                                         <td>{{ optional($m->created_at)->format('Y-m-d h:i A') }}</td>
                                         <td>
-                                            <form method="POST" action="{{ route('admin.contactMessages.destroy', $m->id) }}" onsubmit="return confirm('Delete this message?')">
-                                                @csrf
-                                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                            </form>
+                                            @if($canDelete)
+                                                <form method="POST" action="{{ route('admin.contactMessages.destroy', $m->id) }}" onsubmit="return confirm('Delete this message?')">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -122,7 +133,7 @@
 
             function refreshButtons() {
                 const hasAny = getSelectedIds().length > 0;
-                bulkDeleteBtn.disabled = !hasAny;
+                if (bulkDeleteBtn) bulkDeleteBtn.disabled = !hasAny;
                 bulkPrintBtn.disabled = !hasAny;
             }
 
@@ -142,10 +153,12 @@
                 }
             });
 
-            bulkDeleteBtn.addEventListener('click', function () {
-                if (!confirm('Delete selected messages?')) return;
-                document.getElementById('bulkForm').submit();
-            });
+            if (bulkDeleteBtn) {
+                bulkDeleteBtn.addEventListener('click', function () {
+                    if (!confirm('Delete selected messages?')) return;
+                    document.getElementById('bulkForm').submit();
+                });
+            }
 
             bulkPrintBtn.addEventListener('click', function () {
                 const ids = getSelectedIds();

@@ -8,6 +8,11 @@
 
 @section('content') 
 
+@php
+  $user = auth()->user();
+  $canDelete = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-delete']) : false;
+@endphp
+
 
     <section class="content-header">
       <div class="container-fluid">
@@ -65,10 +70,12 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <form action="{{route('admin.dropCvDelete',$dropCv->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                              @csrf
-                              <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
+                            @if($canDelete)
+                              <form action="{{route('admin.dropCvDelete',$dropCv->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                @csrf
+                                <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                              </form>
+                            @endif
 
                         </div>
                   </td>

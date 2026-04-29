@@ -24,6 +24,11 @@
     </section>
 
  <section class="content">
+
+    @php
+      $u = auth()->user();
+      $canEdit = $u && $u->hasAnyPermission(['front-slider-edit']);
+    @endphp
     
    <div class="card shadow bg-info">
         <div class="card-header">
@@ -74,7 +79,9 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-info" value="Update">
+                            @if($canEdit)
+                              <input type="submit" class="btn btn-info" value="Update">
+                            @endif
                         </div>
                     </form>
                 </div>

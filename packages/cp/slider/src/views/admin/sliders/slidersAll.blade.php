@@ -24,6 +24,13 @@
     </section>
 
  <section class="content">
+
+  @php
+    $u = auth()->user();
+    $canCreate = $u && $u->hasAnyPermission(['front-slider-create']);
+    $canEdit = $u && $u->hasAnyPermission(['front-slider-edit']);
+    $canDelete = $u && $u->hasAnyPermission(['front-slider-delete']);
+  @endphp
     
    <div class="card shadow bg-info">
         <div class="card-header">
@@ -38,6 +45,7 @@
                 </div>
 
                 <div class="card-body">
+                    @if($canCreate)
                     <form action="{{route('admin.sliderStore')}}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -74,6 +82,7 @@
                             <input type="submit" class="btn btn-info">
                         </div>
                     </form>
+                    @endif
                 </div>
             </div>
 
@@ -105,12 +114,16 @@
                         <tr>
                             <td>{{ $i++ }}</td>
                             <td class="d-flex">
-                            <a href="{{route('admin.sliderEdit',$slider)}}" class="text-success mr-2"><i class="fas fa-edit"></i></a>
+                            @if($canEdit)
+                              <a href="{{route('admin.sliderEdit',$slider)}}" class="text-success mr-2"><i class="fas fa-edit"></i></a>
+                            @endif
 
-                            <form action="{{route('admin.sliderDelete', $slider) }}" method="post">
-                                @csrf
-                                <button class="text-danger" onclick="return confirm('Are you sure? you want to delete this Slider Item?')" style="all:unset;" style="cursor: pointer;"><i class="fas fa-trash"></i></button>
-                            </form>
+                            @if($canDelete)
+                              <form action="{{route('admin.sliderDelete', $slider) }}" method="post">
+                                  @csrf
+                                  <button class="text-danger" onclick="return confirm('Are you sure? you want to delete this Slider Item?')" style="all:unset;" style="cursor: pointer;"><i class="fas fa-trash"></i></button>
+                              </form>
+                            @endif
 
                             </td>
 

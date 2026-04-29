@@ -8,6 +8,11 @@
 
 @section('content') 
 
+@php
+  $user = auth()->user();
+  $canCreate = $user && method_exists($user, 'hasAnyPermission') ? $user->hasAnyPermission(['job-post-create']) : false;
+@endphp
+
 
     <section class="content-header">
       <div class="container-fluid">
@@ -138,7 +143,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canCreate)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

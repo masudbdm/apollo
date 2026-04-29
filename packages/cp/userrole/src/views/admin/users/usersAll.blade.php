@@ -34,8 +34,9 @@
           <h3 class="card-title">Users</h3>
 
           <div class="card-tools">
-
-             <a class="btn btn-primary btn-xs" href="{{ route('admin.userCreate') }}"> Create New User</a>
+             @if(auth()->check() && auth()->user()->hasAnyPermission(['user-create']))
+                <a class="btn btn-primary btn-xs" href="{{ route('admin.userCreate') }}"> Create New User</a>
+             @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -68,13 +69,17 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route("admin.userEdit",$user->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @if(auth()->check() && auth()->user()->hasAnyPermission(['user-edit']))
+                                <a href="{{ route("admin.userEdit",$user->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @endif
 
 
-                            <form action="{{route('admin.userDelete',$user->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                              @csrf
-                              <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
+                            @if(auth()->check() && auth()->user()->hasAnyPermission(['user-delete']))
+                                <form action="{{route('admin.userDelete',$user->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                  @csrf
+                                  <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                                </form>
+                            @endif
                         </div>
                   </td>
                   <td>{{$user->name}}</td>

@@ -42,7 +42,9 @@
                             <div class="input-group input-group-sm ">
                               <input type="text" class="form-control" placeholder="Permission Name" name="name" value="{{ old('name') ?: $permission->name }}" aria-label="Permission Name" aria-describedby="basic-addon2">
                               <div class="input-group-append">
-                                <button type="submit" class="input-group-text bg-primary" id="basic-addon2">Save</button>
+                                @if(auth()->check() && auth()->user()->hasAnyPermission(['permission-edit']))
+                                  <button type="submit" class="input-group-text bg-primary" id="basic-addon2">Save</button>
+                                @endif
                               </div>
                             </div>
                             </form>

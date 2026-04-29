@@ -28,6 +28,12 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canOrderShow = $u && $u->hasAnyPermission(['order-show']);
+        $canOrderDelete = $u && $u->hasAnyPermission(['order-delete']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
@@ -68,12 +74,16 @@
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a href="{{ route('admin.orderDeatils',$order->id)}}" class="dropdown-item"><i class="fa fa-eye"></i> Details</a>
+                                @if($canOrderShow)
+                                  <a href="{{ route('admin.orderDeatils',$order->id)}}" class="dropdown-item"><i class="fa fa-eye"></i> Details</a>
+                                @endif
 
-                                <form action="{{ route('admin.orderDelete',$order->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                                  @csrf
-                                  <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                                </form>
+                                @if($canOrderDelete)
+                                  <form action="{{ route('admin.orderDelete',$order->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                                  </form>
+                                @endif
                             </div>
                       </td>
                       <td>{{$order->id}}</td>

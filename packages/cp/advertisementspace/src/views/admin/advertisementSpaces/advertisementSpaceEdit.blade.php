@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canEdit = $u && $u->hasAnyPermission(['ad-edit']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h4 class="card-title">Advertisment Space Post</h4>
@@ -105,7 +109,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canEdit)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

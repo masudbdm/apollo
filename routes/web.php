@@ -17,7 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Disable public registration (users will be created via admin panel).
+Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

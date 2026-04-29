@@ -28,6 +28,11 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canMenuEdit = $u && $u->hasAnyPermission(['menu-edit']);
+      @endphp
+
      <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -85,7 +90,9 @@
 
           </div>
           <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          @if($canMenuEdit)
+            <button type="submit" class="btn btn-primary">Submit</button>
+          @endif
           </div>
 
         </form>

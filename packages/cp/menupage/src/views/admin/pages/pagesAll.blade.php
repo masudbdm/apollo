@@ -25,6 +25,14 @@
 
  <section class="content">
 
+    @php
+      $u = auth()->user();
+      $canPageCreate = $u && $u->hasAnyPermission(['page-create']);
+      $canPageShow = $u && $u->hasAnyPermission(['page-show']);
+      $canPageEdit = $u && $u->hasAnyPermission(['page-edit']);
+      $canPageDelete = $u && $u->hasAnyPermission(['page-delete']);
+    @endphp
+
      <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -33,9 +41,10 @@
                 <a class="btn btn-primary btn-xs" href="{{ route('admin.pagesAll') }}"> Back</a>
             </div>
         </div>
-        <form action="{{ route('admin.pageStore')}}" method="post">
-          @csrf
-          <div class="card-body">
+        @if($canPageCreate)
+          <form action="{{ route('admin.pageStore')}}" method="post">
+            @csrf
+            <div class="card-body">
             <div class="card card-widget mb-0">
               <div class="card-body w3-gray">
                 <div class="card card-widget mb-0 text-dark">
@@ -92,11 +101,12 @@
               </div>
             </div>
           </div>
-          <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
 
-        </form>
+          </form>
+        @endif
         <!-- /.card-footer-->
       </div>
       <!-- /.card -->
@@ -124,7 +134,9 @@
                     @foreach ($pages as $page)
                     <div class="card card-widget ui-sortable-handle text-dark" id="{{ $page->id }}">
                         <div class="card-body">
-                            <i title="Drag up or down" class="fas fa-arrows-alt-v" style="cursor: pointer"></i>
+                            @if($canPageEdit)
+                              <i title="Drag up or down" class="fas fa-arrows-alt-v" style="cursor: pointer"></i>
+                            @endif
                             Page ID: <b>{{ $page->id }}</b>,
                             Page Name: <b> {{ $page->name }}</b>,
                             Active:
@@ -165,18 +177,24 @@
                         {{-- link and copy end --}}
 
                             <div class="float-right d-flex">
-                                 <a class="btn btn-primary btn-sm mr-1" 
-                                 href="{{route('admin.pageItemCreate',$page->id)}}">Add Page Part</a>
+                                @if($canPageEdit)
+                                  <a class="btn btn-primary btn-sm mr-1" 
+                                  href="{{route('admin.pageItemCreate',$page->id)}}">Add Page Part</a>
+                                @endif
 
-                                <a class="btn btn-primary btn-sm mr-1" href="{{ route('admin.pageEdit',$page->id) }}">Edit</a>
+                                @if($canPageEdit)
+                                  <a class="btn btn-primary btn-sm mr-1" href="{{ route('admin.pageEdit',$page->id) }}">Edit</a>
+                                @endif
 
                                 @if($page->link or $page->id == $homePage->id or $page->id == 2 )
 
                                 @else
-                                <form action="{{ route('admin.pageDelete',$page->id) }}" method="post" onclick="return confirm('Do you really want to delete?');">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
+                                  @if($canPageDelete)
+                                    <form action="{{ route('admin.pageDelete',$page->id) }}" method="post" onclick="return confirm('Do you really want to delete?');">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                  @endif
                                 @endif
 
                             </div>

@@ -28,37 +28,44 @@ Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
     // menu route
 
     Route::get('menus/all', [
+        'middleware' => ['permission:menu-show'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menusAll',
         'as' => 'admin.menusAll'
     ]);
 
 
     Route::post('menu/store', [
+        'middleware' => ['permission:menu-create'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuStore',
         'as' => 'admin.menuStore'
     ]);
 
     Route::get('menu/edit/menu/{menu}', [
+        'middleware' => ['permission:menu-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuEdit',
         'as' => 'admin.menuEdit'
     ]);
 
     Route::post('menu/update/menu/{menu}', [
+        'middleware' => ['permission:menu-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuUpdate',
         'as' => 'admin.menuUpdate'
     ]);
 
     Route::get('menu/show/menu/{menu}', [
+        'middleware' => ['permission:menu-show'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuShow',
         'as' => 'admin.menuShow'
     ]);
 
     Route::post('menu/delete/menu/{menu}', [
+        'middleware' => ['permission:menu-delete'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuDelete',
         'as' => 'admin.menuDelete'
     ]);
 
     Route::get('menu/sort', [
+        'middleware' => ['permission:menu-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@menuSort',
         'as' => 'admin.menuSort'
     ]);
@@ -67,32 +74,38 @@ Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
     // page route
 
     Route::get('pages/all', [
+        'middleware' => ['permission:page-show'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pagesAll',
         'as' => 'admin.pagesAll'
     ]);
 
 
     Route::post('page/store', [
+        'middleware' => ['permission:page-create'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageStore',
         'as' => 'admin.pageStore'
     ]);
 
     Route::get('page/edit/page/{page}', [
+        'middleware' => ['permission:page-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageEdit',
         'as' => 'admin.pageEdit'
     ]);
 
     Route::post('page/update/page/{page}', [
+        'middleware' => ['permission:page-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageUpdate',
         'as' => 'admin.pageUpdate'
     ]);
 
     Route::post('page/delete/page/{page}', [
+        'middleware' => ['permission:page-delete'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageDelete',
         'as' => 'admin.pageDelete'
     ]);
 
     Route::get('page/sort', [
+        'middleware' => ['permission:page-edit'],
         'uses' => 'Cp\Menupage\Controllers\AdminMenupageController@pageSort',
         'as' => 'admin.pageSort'
     ]);

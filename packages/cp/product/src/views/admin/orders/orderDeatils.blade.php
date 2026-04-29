@@ -8,6 +8,12 @@
 
 @section('content') 
 
+    @php
+      $u = auth()->user();
+      $canOrderEdit = $u && $u->hasAnyPermission(['order-edit']);
+      $canOrderDelete = $u && $u->hasAnyPermission(['order-delete']);
+    @endphp
+
     <!-- Main content -->
  <section class="content pt-5">
       <div class="container-fluid">
@@ -75,7 +81,9 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                  <button type="submit" class="form-control btn btn-primary btn-block">Submit</button>
+                                  @if($canOrderEdit)
+                                    <button type="submit" class="form-control btn btn-primary btn-block">Submit</button>
+                                  @endif
                                 </div>
                             
                             </div>
@@ -113,15 +121,17 @@
                                     <td>{{$item->quantity}}</td>
                                     <td>{{$item->total_cost}}</td>
                                     <td style="width:20px;">
-                                    <form action="{{ route('admin.orderItemDelete',$item->id)}}" method="post"
-                                    onclick="return confirm('Are you sure to delete?')">
-                                    @csrf
+                                    @if($canOrderDelete)
+                                      <form action="{{ route('admin.orderItemDelete',$item->id)}}" method="post"
+                                      onclick="return confirm('Are you sure to delete?')">
+                                      @csrf
                                      
                                     <input type="hidden" name="order_id" value="{{ $order->id }}">
                                       <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="fas fa-times"></i>
                                       </button>
                                       </form>
+                                    @endif
                                     </td>
                                     
                                 </tr>  
@@ -242,7 +252,9 @@
 
                                         <div class="col-sm-7">
 
-                                        <button type="submit" class="btn btn-primary btn-block btn-sm">Save</button>
+                                        @if($canOrderEdit)
+                                          <button type="submit" class="btn btn-primary btn-block btn-sm">Save</button>
+                                        @endif
 
                                         </div>
                                     </div>

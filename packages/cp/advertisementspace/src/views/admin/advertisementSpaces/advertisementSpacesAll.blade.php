@@ -28,6 +28,13 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['ad-create']);
+        $canEdit = $u && $u->hasAnyPermission(['ad-edit']);
+        $canDelete = $u && $u->hasAnyPermission(['ad-delete']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
@@ -35,7 +42,9 @@
 
           <div class="card-tools">
 
-             <a class="btn btn-primary btn-xs" href="{{ route('admin.advertisementSpaceCreate') }}">Advertisment Space Create</a>
+             @if($canCreate)
+               <a class="btn btn-primary btn-xs" href="{{ route('admin.advertisementSpaceCreate') }}">Advertisment Space Create</a>
+             @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -65,14 +74,18 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route("admin.advertisementSpaceEdit",$advertisement->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @if($canEdit)
+                              <a href="{{ route("admin.advertisementSpaceEdit",$advertisement->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @endif
 
       
 
-                            <form action="{{route('admin.advertisementSpaceDelete',$advertisement->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                              @csrf
-                              <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
+                            @if($canDelete)
+                              <form action="{{route('admin.advertisementSpaceDelete',$advertisement->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                @csrf
+                                <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                              </form>
+                            @endif
                         </div>
                   </td>
                   <td>{{$advertisement->title}}</td>

@@ -36,9 +36,9 @@
           <div class="card-tools">
             
 
-            {{-- @can('role-create') --}}
-            <a class="btn btn-primary btn-xs py-2" href="{{ route('admin.roleCreate') }}"> Create New Role</a>
-            {{-- @endcan --}}
+            @if(auth()->check() && auth()->user()->hasAnyPermission(['role-create']))
+                <a class="btn btn-primary btn-xs py-2" href="{{ route('admin.roleCreate') }}"> Create New Role</a>
+            @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -61,24 +61,27 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $role->name }}</td>
                             <td>
-                                <a class="btn btn-info btn-xs" href="{{ route('admin.roleShow', $role) }}">Show</a>
+                                @if(auth()->check() && auth()->user()->hasAnyPermission(['role-show']))
+                                    <a class="btn btn-info btn-xs" href="{{ route('admin.roleShow', $role) }}">Show</a>
+                                @endif
 
-                                <a class="btn btn-primary btn-xs"
-                                    href="{{ route('admin.roleEdit', $role) }}">Edit</a>
+                                @if(auth()->check() && auth()->user()->hasAnyPermission(['role-edit']))
+                                    <a class="btn btn-primary btn-xs"
+                                        href="{{ route('admin.roleEdit', $role) }}">Edit</a>
+                                @endif
 
                                 @if(str_contains($role->name, 'admin'))
 
                                 @else
-        
-               
+                                    @if(auth()->check() && auth()->user()->hasAnyPermission(['role-delete']))
+                                        <a href=""  onclick="event.preventDefault();
+                                                             document.getElementById('delete-form').submit();" 
+                                                            class="btn btn-danger btn-xs">Delete</a>
 
-                                <a href=""  onclick="event.preventDefault();
-                                                     document.getElementById('delete-form').submit();" 
-                                                     class="btn btn-danger btn-xs">Delete</a>
-
-                                 <form onsubmit="return confirm('Do you really want to delete this?');" id="delete-form" action="{{ route('admin.roleDelete', $role) }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                        <form onsubmit="return confirm('Do you really want to delete this?');" id="delete-form" action="{{ route('admin.roleDelete', $role) }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    @endif
 
                                 @endif
                                 

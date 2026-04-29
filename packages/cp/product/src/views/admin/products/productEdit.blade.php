@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canEditProduct = $u && $u->hasAnyPermission(['product-edit']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h4 class="card-title">Edit Product</h4>
@@ -173,8 +177,10 @@
                                                 download>{{ $file->file_original_name }}
 
                                             </a> &nbsp;
-                                            <a href="{{ route('admin.productFileDelete',$file->id)}}" class="fas fa-trash text-danger" onclick="return confirm('Do you really want to delete?');" >
-                                            </a>
+                                            @if($canEditProduct)
+                                              <a href="{{ route('admin.productFileDelete',$file->id)}}" class="fas fa-trash text-danger" onclick="return confirm('Do you really want to delete?');" >
+                                              </a>
+                                            @endif
                                             </li>
                                             {{-- {{ route('postFileDelete',$file->id) }} --}}
                                     @endforeach
@@ -226,7 +232,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canEditProduct)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>
@@ -242,6 +250,7 @@
           <div class="card-body" style="background-color: rgba(128, 128, 128, 0.15);">
               <p class="text-muted small mb-3">Gallery images for the product detail page (carousel). Upload one or more files — same as the dedicated images screen.</p>
 
+              @if($canEditProduct)
               <form method="post" action="{{ route('admin.productImageStore') }}" enctype="multipart/form-data" class="mb-4">
                   @csrf
                   <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -258,6 +267,7 @@
                       </div>
                   </div>
               </form>
+              @endif
 
               @if($product->productImages->count() > 0)
                   <div class="table-responsive">
@@ -279,20 +289,28 @@
                                           <img src="{{ route('imagecache', ['template' => 'ppsm', 'filename' => $image->fi()]) }}" alt="" class="img-thumbnail" style="max-height: 80px;">
                                       </td>
                                       <td>
-                                          <input type="checkbox" name="toogle" data-url="{{ route('admin.productImageActive') }}" value="{{ $image->id }}" data-toggle="toggle" data-size="sm" {{ $image->active == 1 ? 'checked' : '' }} data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
+                                          @if($canEditProduct)
+                                            <input type="checkbox" name="toogle" data-url="{{ route('admin.productImageActive') }}" value="{{ $image->id }}" data-toggle="toggle" data-size="sm" {{ $image->active == 1 ? 'checked' : '' }} data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
+                                          @else
+                                            {{ $image->active == 1 ? 'On' : 'Off' }}
+                                          @endif
                                       </td>
                                       <td class="text-center">
-                                          <a href="{{ route('admin.productImageEdit', $image->id) }}" class="btn btn-sm btn-outline-secondary" title="Replace image file">
-                                              <i class="fa fa-edit"></i> Replace
-                                          </a>
+                                          @if($canEditProduct)
+                                            <a href="{{ route('admin.productImageEdit', $image->id) }}" class="btn btn-sm btn-outline-secondary" title="Replace image file">
+                                                <i class="fa fa-edit"></i> Replace
+                                            </a>
+                                          @endif
                                       </td>
                                       <td class="text-center">
-                                          <a href="{{ route('admin.productImageDelete', $image->id) }}"
-                                             class="btn btn-sm btn-danger"
-                                             title="Delete this image"
-                                             onclick="return confirm('Permanently delete this extra image?');">
-                                              <i class="fa fa-trash"></i>
-                                          </a>
+                                          @if($canEditProduct)
+                                            <a href="{{ route('admin.productImageDelete', $image->id) }}"
+                                              class="btn btn-sm btn-danger"
+                                              title="Delete this image"
+                                              onclick="return confirm('Permanently delete this extra image?');">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                          @endif
                                       </td>
                                   </tr>
                               @endforeach

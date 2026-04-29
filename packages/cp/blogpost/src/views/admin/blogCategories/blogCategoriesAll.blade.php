@@ -28,6 +28,13 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['post-category-create']);
+        $canEdit = $u && $u->hasAnyPermission(['post-category-edit']);
+        $canDelete = $u && $u->hasAnyPermission(['post-category-delete']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
@@ -35,7 +42,9 @@
 
           <div class="card-tools">
 
-             <a class="btn btn-primary btn-xs" href="{{ route('admin.blogCategoryCreate') }}"> Create New Blog Category</a>
+             @if($canCreate)
+                <a class="btn btn-primary btn-xs" href="{{ route('admin.blogCategoryCreate') }}"> Create New Blog Category</a>
+             @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -65,18 +74,25 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route("admin.blogCategoryEdit",$category->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @if($canEdit)
+                              <a href="{{ route("admin.blogCategoryEdit",$category->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                            @endif
 
-
-                            <form action="{{route('admin.blogCategoryDelete',$category->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                              @csrf
-                              <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
+                            @if($canDelete)
+                              <form action="{{route('admin.blogCategoryDelete',$category->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                @csrf
+                                <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                              </form>
+                            @endif
                         </div>
                   </td>
                   <td>{{$category->name}}</td>
                   <td>
-                      <input type="checkbox" name="toogle" data-url="{{route('admin.blogCategoryActive')}}" value="{{$category->id}}" data-toggle="toggle" data-size="sm" {{$category->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                      @if($canEdit)
+                        <input type="checkbox" name="toogle" data-url="{{route('admin.blogCategoryActive')}}" value="{{$category->id}}" data-toggle="toggle" data-size="sm" {{$category->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                      @else
+                        {{ $category->active == 1 ? 'On' : 'Off' }}
+                      @endif
                   </td>
 
                 </tr>  

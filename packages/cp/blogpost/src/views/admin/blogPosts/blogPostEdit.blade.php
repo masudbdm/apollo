@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canEditPost = $u && $u->hasAnyPermission(['post-edit']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h4 class="card-title">Edit Bolg Post</h4>
@@ -164,8 +168,10 @@
                                               {{ $file->file_original_name }}
 
                                             </a> &nbsp;
-                                            <a href="{{ route('admin.postFileDelete',$file->id)}}" class="fas fa-trash text-danger" onclick="return confirm('Do you really want to delete?');" >
-                                            </a>
+                                            @if($canEditPost)
+                                              <a href="{{ route('admin.postFileDelete',$file->id)}}" class="fas fa-trash text-danger" onclick="return confirm('Do you really want to delete?');" >
+                                              </a>
+                                            @endif
                                             </li>
                                             {{-- {{ route('postFileDelete',$file->id) }} --}}
                                     @endforeach
@@ -211,7 +217,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canEditPost)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

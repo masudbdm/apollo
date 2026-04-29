@@ -7,6 +7,12 @@
 @endpush
 
 @section('content') 
+    @php
+        $user = auth()->user();
+        $canEdit = $user && method_exists($user, 'hasAnyPermission')
+            ? $user->hasAnyPermission(['website-setting-edit'])
+            : false;
+    @endphp
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -285,7 +291,9 @@
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+                            @if($canEdit)
+                                <button type="submit" class="btn btn-primary pull-right">Update</button>
+                            @endif
                         </div>
                     </form>
                 </div>

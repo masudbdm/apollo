@@ -73,7 +73,9 @@
                  @endforeach
                  </div>
 
-              <button type="submit" class="btn btn-primary ">Save</button>
+              @if(auth()->check() && auth()->user()->hasAnyPermission(['role-create']))
+                  <button type="submit" class="btn btn-primary ">Save</button>
+              @endif
             </form>
 
  

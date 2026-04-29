@@ -62,11 +62,12 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          
+                          @if(auth()->check() && auth()->user()->hasAnyPermission(['asigned-role-users']))
                             <form action="{{ route('admin.roleDetach',$user->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
                               @csrf
                               <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
                             </form>
+                          @endif
                         </div>
                   </td>
                   <td>{{$user->name}}</td>

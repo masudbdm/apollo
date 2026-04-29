@@ -1,3 +1,11 @@
+@php
+  $user = auth()->user();
+  $canWebsiteSettingShow = $user && method_exists($user, 'hasAnyPermission')
+      ? $user->hasAnyPermission(['website-setting-show'])
+      : false;
+@endphp
+
+@if($canWebsiteSettingShow)
  <li class="nav-item  {{ session('lsbm') == 'websitesetting' ? ' menu-open ' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-chart-pie"></i>
@@ -17,3 +25,4 @@
         
     </ul>
 </li>
+@endif

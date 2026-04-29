@@ -28,6 +28,14 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['product-create']);
+        $canShow = $u && $u->hasAnyPermission(['product-show']);
+        $canEdit = $u && $u->hasAnyPermission(['product-edit']);
+        $canDelete = $u && $u->hasAnyPermission(['product-delete']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
@@ -35,7 +43,9 @@
 
           <div class="card-tools">
 
-             <a class="btn btn-primary btn-xs" href="{{ route('admin.productCreate') }}"> Create New Product</a>
+             @if($canCreate)
+               <a class="btn btn-primary btn-xs" href="{{ route('admin.productCreate') }}"> Create New Product</a>
+             @endif
 
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
@@ -71,17 +81,25 @@
 
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
-                              <a  href="{{ route('admin.productImagesAll',$product->id)}}" class="dropdown-item"><i class="fas fa-images"></i> Add Images</a>
+                              @if($canEdit)
+                                <a  href="{{ route('admin.productImagesAll',$product->id)}}" class="dropdown-item"><i class="fas fa-images"></i> Add Images</a>
+                              @endif
                               
-                              <a href="{{ route("admin.productEdit",$product->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                              @if($canEdit)
+                                <a href="{{ route("admin.productEdit",$product->id)}}" class="dropdown-item"><i class="fa fa-edit"></i> Edit</a>
+                              @endif
 
-                              <a href="{{ route("admin.productShow",$product->id)}}" class="dropdown-item"><i class="fa fa-eye"></i> Details</a>
+                              @if($canShow)
+                                <a href="{{ route("admin.productShow",$product->id)}}" class="dropdown-item"><i class="fa fa-eye"></i> Details</a>
+                              @endif
 
 
-                              <form action="{{route('admin.productDelete',$product->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
-                                @csrf
-                                <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
-                              </form>
+                              @if($canDelete)
+                                <form action="{{route('admin.productDelete',$product->id)}}" method="post" onclick="return confirm('Are you sure to delete?')">
+                                  @csrf
+                                  <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+                                </form>
+                              @endif
                             </div>
                         </div>
                     </td>
@@ -94,7 +112,11 @@
                     </td>
 
                     <td>
-                        <input type="checkbox" name="toogle" data-url="{{route('admin.productActive')}}" value="{{$product->id}}" data-toggle="toggle" data-size="sm" {{$product->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                        @if($canEdit)
+                          <input type="checkbox" name="toogle" data-url="{{route('admin.productActive')}}" value="{{$product->id}}" data-toggle="toggle" data-size="sm" {{$product->active==1 ? 'checked' : '' }} data-on="On"  data-off="Off" data-onstyle="success" data-offstyle="danger">
+                        @else
+                          {{ $product->active == 1 ? 'On' : 'Off' }}
+                        @endif
                     </td>
                   </tr>  
                   @endforeach

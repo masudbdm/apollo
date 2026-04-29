@@ -185,12 +185,12 @@
 
                                             <ul class="dropdown-menu">
 
-                                                <li><a class="dropdown-item" href="{{ route('admin.dashboard')}}"> My Dashboard</a></li>
+                                                <!-- <li><a class="dropdown-item" href="{{ route('admin.dashboard')}}"> My Dashboard</a></li>
                                             
-                                                <li>
+                                                <li> -->
 
 
-                                                @if (Auth::user()->hasRole('admin'))
+                                                @if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('editor'))
                                                      <li><a class="dropdown-item" href="{{ route('admin.dashboard')}}">Admin Dashboard</a></li>
                                             
                                            

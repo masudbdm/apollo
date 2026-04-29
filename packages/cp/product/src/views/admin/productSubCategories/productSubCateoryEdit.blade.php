@@ -28,6 +28,11 @@
     <!-- Main content -->
     <section class="content">
 
+      @php
+        $u = auth()->user();
+        $canEdit = $u && $u->hasAnyPermission(['product-subcategory-edit']);
+      @endphp
+
       <!-- Default box -->
       <div class="card">
         <div class="card-header bg-info">
@@ -88,7 +93,9 @@
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          @if($canEdit)
+            <button type="submit" class="btn btn-primary">Submit</button>
+          @endif
           </div>
 
         </form>

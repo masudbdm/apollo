@@ -1,3 +1,9 @@
+@php
+  $u = auth()->user();
+  $canFrontSliderShow = $u && $u->hasAnyPermission(['front-slider-show']);
+@endphp
+
+@if($canFrontSliderShow)
  <li class="nav-item  {{ session('lsbm') == 'slider' ? ' menu-open ' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-chart-pie"></i>
@@ -17,3 +23,4 @@
         
     </ul>
 </li>
+@endif

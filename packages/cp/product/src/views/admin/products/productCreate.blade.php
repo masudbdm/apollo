@@ -27,6 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
+      @php
+        $u = auth()->user();
+        $canCreate = $u && $u->hasAnyPermission(['product-create']);
+      @endphp
       <div class="card ">
           <div class="card-header bg-info">
               <h3 class="card-title">Create New Product</h3>
@@ -106,7 +110,9 @@
                                 <h3 class="card-title mt-2">Media Gallery</h3>
 
                                 <div class="card-tools">
-                                    <a href="{{ route('admin.mediasAll') }}" class="btn btn-secondary mr-2"><i class="fa fa-image mr-2"></i>Upload Image</a>
+                                    @if(auth()->check() && auth()->user()->hasAnyPermission(['media-show']))
+                                      <a href="{{ route('admin.mediasAll') }}" class="btn btn-secondary mr-2"><i class="fa fa-image mr-2"></i>Upload Image</a>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-body showMedia" style="height: 400px; overflow: scroll">
@@ -200,7 +206,9 @@
               </div>
 
               <div class="card-footer text-right">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    @if($canCreate)
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    @endif
               </div>
 
           </form>

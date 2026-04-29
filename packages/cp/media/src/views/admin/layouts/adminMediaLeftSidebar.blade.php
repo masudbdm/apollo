@@ -1,3 +1,10 @@
+@php
+  $u = auth()->user();
+  $canMediaMenuShow = $u && $u->hasAnyPermission(['media-menu-show']);
+  $canMediaShow = $u && $u->hasAnyPermission(['media-show']);
+@endphp
+
+@if($canMediaMenuShow)
  <li class="nav-item  {{ session('lsbm') == 'media' ? ' menu-open ' : '' }}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -7,13 +14,16 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.mediasAll')}}" class="nav-link {{ session('lsbsm') == 'mediasAll' ? ' active ' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Medias All</p>
-                </a>
-              </li>
+              @if($canMediaShow)
+                <li class="nav-item">
+                  <a href="{{ route('admin.mediasAll')}}" class="nav-link {{ session('lsbsm') == 'mediasAll' ? ' active ' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Medias All</p>
+                  </a>
+                </li>
+              @endif
               
                
             </ul>
           </li>
+@endif
